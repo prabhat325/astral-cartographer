@@ -1,0 +1,106 @@
+{
+  "summary": {
+    "totalFiles": 3,
+    "totalEdges": 5,
+    "totalSymbols": 4,
+    "totalFunctionCalls": 3,
+    "totalErrors": 0
+  },
+  "nodes": [
+    {
+      "id": "App.jsx",
+      "type": "file"
+    },
+    {
+      "id": "Graph.jsx",
+      "type": "file"
+    },
+    {
+      "id": "utils.js",
+      "type": "file"
+    }
+  ],
+  "edges": [
+    {
+      "source": "App.jsx",
+      "target": "Graph.jsx",
+      "type": "import",
+      "line": 1
+    },
+    {
+      "source": "App.jsx",
+      "target": "utils.js",
+      "type": "import",
+      "line": 2
+    },
+    {
+      "source": "App.jsx::App",
+      "target": "Graph",
+      "type": "calls",
+      "line": 5
+    },
+    {
+      "source": "App.jsx::App",
+      "target": "formatData",
+      "type": "calls",
+      "line": 5
+    },
+    {
+      "source": "utils.js::formatData",
+      "target": "value.trim",
+      "type": "calls",
+      "line": 2
+    }
+  ],
+  "symbols": [
+    {
+      "id": "App.jsx::App",
+      "name": "App",
+      "type": "function",
+      "file": "App.jsx",
+      "line": 4
+    },
+    {
+      "id": "Graph.jsx::Graph",
+      "name": "Graph",
+      "type": "function",
+      "file": "Graph.jsx",
+      "line": 1
+    },
+    {
+      "id": "utils.js::formatData",
+      "name": "formatData",
+      "type": "function",
+      "file": "utils.js",
+      "line": 1
+    },
+    {
+      "id": "utils.js::DataFormatter",
+      "name": "DataFormatter",
+      "type": "class",
+      "file": "utils.js",
+      "line": 5
+    }
+  ],
+  "functionCalls": [
+    {
+      "file": "App.jsx",
+      "caller": "App",
+      "callee": "Graph",
+      "line": 5
+    },
+    {
+      "file": "App.jsx",
+      "caller": "App",
+      "callee": "formatData",
+      "line": 5
+    },
+    {
+      "file": "utils.js",
+      "caller": "formatData",
+      "callee": "value.trim",
+      "line": 2
+    }
+  ],
+  "errors": []
+}
