@@ -29,8 +29,19 @@ async function getRepository(owner, repo) {
 
     return response.data;
 }
+async function getRepositoryTree(owner, repo) {
+    const response = await octokit.rest.git.getTree({
+        owner,
+        repo,
+        tree_sha: "HEAD",
+        recursive: "true"
+    });
+
+    return response.data.tree;
+}
 
 module.exports = {
     parseGitHubUrl,
-    getRepository
+    getRepository,
+    getRepositoryTree
 };

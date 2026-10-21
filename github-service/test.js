@@ -1,6 +1,6 @@
 const {
     parseGitHubUrl,
-    getRepository
+    getRepositoryTree
 } = require("./githubClient");
 
 async function test() {
@@ -12,10 +12,16 @@ async function test() {
         console.log("Owner:", owner);
         console.log("Repository:", repo);
 
-        const repository = await getRepository(owner, repo);
+        const tree = await getRepositoryTree(owner, repo);
 
-        console.log("Repository Name:", repository.name);
-        console.log("Stars:", repository.stargazers_count);
+        console.log("Total items:", tree.length);
+
+        console.log("\nFirst 10 items:");
+
+        tree.slice(0, 10).forEach((item) => {
+            console.log(item.path, "-", item.type);
+        });
+
     } catch (error) {
         console.error("Error:", error.message);
     }
