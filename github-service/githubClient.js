@@ -79,10 +79,30 @@ function filterSourceFiles(tree) {
         );
     });
 }
+async function getFileContent(owner, repo, path) {
+    const response = await octokit.rest.repos.getContent({
+        owner,
+        repo,
+        path
+    });
+
+    if (Array.isArray(response.data)) {
+        throw new Error("The provided path is a directory, not a file");
+    }
+
+    if (response.data.encoding !== "base64") {
+        throw new Error("Unsupported file encoding");
+    }
+
+    return Buffer
+        .from(response.data.content, "base64")
+        .toString("utf-8");
+}
 
 module.exports = {
     parseGitHubUrl,
     getRepository,
     getRepositoryTree,
-    filterSourceFiles
+    filterSourceFiles,
+    getFileContent
 };
