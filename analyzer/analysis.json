@@ -1,0 +1,54 @@
+{
+  "summary": {
+    "totalFiles": 3,
+    "totalEdges": 1,
+    "totalSymbols": 3,
+    "totalErrors": 0
+  },
+  "nodes": [
+    {
+      "id": "App.jsx",
+      "type": "file"
+    },
+    {
+      "id": "Graph.jsx",
+      "type": "file"
+    },
+    {
+      "id": "utils.jsx",
+      "type": "file"
+    }
+  ],
+  "edges": [
+    {
+      "source": "App.jsx",
+      "target": "Graph.jsx",
+      "type": "import",
+      "line": 1
+    }
+  ],
+  "symbols": [
+    {
+      "id": "App.jsx::App",
+      "name": "App",
+      "type": "function",
+      "file": "App.jsx",
+      "line": 4
+    },
+    {
+      "id": "Graph.jsx::Graph",
+      "name": "Graph",
+      "type": "function",
+      "file": "Graph.jsx",
+      "line": 1
+    },
+    {
+      "id": "utils.jsx::formatData",
+      "name": "formatData",
+      "type": "function",
+      "file": "utils.jsx",
+      "line": 1
+    }
+  ],
+  "errors": []
+}
