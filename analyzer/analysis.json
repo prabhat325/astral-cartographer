@@ -1,8 +1,8 @@
 {
   "summary": {
     "totalFiles": 3,
-    "totalEdges": 1,
-    "totalSymbols": 3,
+    "totalEdges": 2,
+    "totalSymbols": 4,
     "totalErrors": 0
   },
   "nodes": [
@@ -15,7 +15,7 @@
       "type": "file"
     },
     {
-      "id": "utils.jsx",
+      "id": "utils.js",
       "type": "file"
     }
   ],
@@ -25,6 +25,12 @@
       "target": "Graph.jsx",
       "type": "import",
       "line": 1
+    },
+    {
+      "source": "App.jsx",
+      "target": "utils.js",
+      "type": "import",
+      "line": 2
     }
   ],
   "symbols": [
@@ -43,11 +49,18 @@
       "line": 1
     },
     {
-      "id": "utils.jsx::formatData",
+      "id": "utils.js::formatData",
       "name": "formatData",
       "type": "function",
-      "file": "utils.jsx",
+      "file": "utils.js",
       "line": 1
+    },
+    {
+      "id": "utils.js::DataFormatter",
+      "name": "DataFormatter",
+      "type": "class",
+      "file": "utils.js",
+      "line": 5
     }
   ],
   "errors": []
