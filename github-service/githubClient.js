@@ -39,9 +39,50 @@ async function getRepositoryTree(owner, repo) {
 
     return response.data.tree;
 }
+function filterSourceFiles(tree) {
+    const allowedExtensions = [
+        ".js",
+        ".jsx",
+        ".ts",
+        ".tsx",
+        ".py",
+        ".java",
+        ".cpp",
+        ".c",
+        ".h",
+        ".go",
+        ".rs",
+        ".php"
+    ];
+
+    const ignoredPaths = [
+        "node_modules/",
+        ".git/",
+        "dist/",
+        "build/",
+        "coverage/"
+    ];
+
+    return tree.filter((item) => {
+        if (item.type !== "blob") {
+            return false;
+        }
+
+        const path = item.path.toLowerCase();
+
+        if (ignoredPaths.some((ignored) => path.includes(ignored))) {
+            return false;
+        }
+
+        return allowedExtensions.some((extension) =>
+            path.endsWith(extension)
+        );
+    });
+}
 
 module.exports = {
     parseGitHubUrl,
     getRepository,
-    getRepositoryTree
+    getRepositoryTree,
+    filterSourceFiles
 };

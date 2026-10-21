@@ -1,6 +1,7 @@
 const {
     parseGitHubUrl,
-    getRepositoryTree
+    getRepositoryTree,
+    filterSourceFiles
 } = require("./githubClient");
 
 async function test() {
@@ -9,17 +10,17 @@ async function test() {
 
         const { owner, repo } = parseGitHubUrl(repoUrl);
 
-        console.log("Owner:", owner);
-        console.log("Repository:", repo);
-
         const tree = await getRepositoryTree(owner, repo);
 
-        console.log("Total items:", tree.length);
+        const sourceFiles = filterSourceFiles(tree);
 
-        console.log("\nFirst 10 items:");
+        console.log("Total repository items:", tree.length);
+        console.log("Source files:", sourceFiles.length);
 
-        tree.slice(0, 10).forEach((item) => {
-            console.log(item.path, "-", item.type);
+        console.log("\nFirst 10 source files:");
+
+        sourceFiles.slice(0, 10).forEach((file) => {
+            console.log(file.path);
         });
 
     } catch (error) {
