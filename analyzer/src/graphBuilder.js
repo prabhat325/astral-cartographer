@@ -10,10 +10,7 @@ function resolveImport(sourceFile, importPath, fileSet) {
   if (!importPath.startsWith(".")) return null;
 
   const base = path.posix.normalize(
-    path.posix.join(
-      path.posix.dirname(sourceFile),
-      importPath
-    )
+    path.posix.join(path.posix.dirname(sourceFile), importPath)
   );
 
   const candidates = [
@@ -26,7 +23,7 @@ function resolveImport(sourceFile, importPath, fileSet) {
   return candidates.find((candidate) => fileSet.has(candidate)) ?? null;
 }
 
-export function buildGraph(files, importsByFile) {
+export function buildGraph(files, importsByFile, functionCalls = []) {
   const fileSet = new Set(files.map((file) => file.path));
 
   const nodes = files.map((file) => ({
@@ -49,6 +46,15 @@ export function buildGraph(files, importsByFile) {
         });
       }
     }
+  }
+
+  for (const call of functionCalls) {
+    edges.push({
+      source: `${call.file}::${call.caller}`,
+      target: call.callee,
+      type: "calls",
+      line: call.line
+    });
   }
 
   return { nodes, edges };
