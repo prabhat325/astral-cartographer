@@ -1,6 +1,8 @@
 const {
     parseGitHubUrl,
-    getFileContent
+    getRepositoryTree,
+    filterSourceFiles,
+    getSourceFiles
 } = require("./githubClient");
 
 async function test() {
@@ -9,17 +11,31 @@ async function test() {
 
         const { owner, repo } = parseGitHubUrl(repoUrl);
 
-        const filePath = "README.md";
+        const tree = await getRepositoryTree(owner, repo);
 
-        const content = await getFileContent(
+        const sourceFiles = filterSourceFiles(tree);
+
+        // Only test first 3 files for now
+        const selectedFiles = sourceFiles.slice(0, 3);
+
+        console.log("Fetching:", selectedFiles.length, "files");
+
+        const files = await getSourceFiles(
             owner,
             repo,
-            filePath
+            selectedFiles
         );
 
-        console.log("File:", filePath);
-        console.log("\nFile content:\n");
-        console.log(content.slice(0, 1000));
+        console.log("\nFetched files:");
+
+        files.forEach((file) => {
+            console.log(
+                file.path,
+                "→",
+                file.content.length,
+                "characters"
+            );
+        });
 
     } catch (error) {
         console.error("Error:", error.message);

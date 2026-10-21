@@ -98,11 +98,35 @@ async function getFileContent(owner, repo, path) {
         .from(response.data.content, "base64")
         .toString("utf-8");
 }
+async function getSourceFiles(owner, repo, sourceFiles) {
+    const files = [];
 
+    for (const file of sourceFiles) {
+        try {
+            const content = await getFileContent(
+                owner,
+                repo,
+                file.path
+            );
+
+            files.push({
+                path: file.path,
+                content: content
+            });
+        } catch (error) {
+            console.log(
+                `Skipping ${file.path}: ${error.message}`
+            );
+        }
+    }
+
+    return files;
+}
 module.exports = {
     parseGitHubUrl,
     getRepository,
     getRepositoryTree,
     filterSourceFiles,
-    getFileContent
+    getFileContent,
+    getSourceFiles
 };
