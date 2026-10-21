@@ -1,12 +1,21 @@
-const { getRepository } = require("./githubClient");
+const {
+    parseGitHubUrl,
+    getRepository
+} = require("./githubClient");
 
 async function test() {
     try {
-        const repo = await getRepository("facebook", "react");
+        const repoUrl = "https://github.com/facebook/react";
 
-        console.log("Repository Name:", repo.name);
-        console.log("Owner:", repo.owner.login);
-        console.log("Stars:", repo.stargazers_count);
+        const { owner, repo } = parseGitHubUrl(repoUrl);
+
+        console.log("Owner:", owner);
+        console.log("Repository:", repo);
+
+        const repository = await getRepository(owner, repo);
+
+        console.log("Repository Name:", repository.name);
+        console.log("Stars:", repository.stargazers_count);
     } catch (error) {
         console.error("Error:", error.message);
     }
