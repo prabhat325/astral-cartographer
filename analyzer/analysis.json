@@ -1,23 +1,200 @@
 {
   "summary": {
-    "totalFiles": 3,
-    "totalEdges": 5,
-    "totalSymbols": 4,
-    "totalFunctionCalls": 3,
+    "totalFiles": 7,
+    "totalEdges": 7,
+    "totalSymbols": 8,
+    "totalFunctionCalls": 15,
+    "circularCyclesCount": 1,
+    "godFilesCount": 0,
+    "healthScore": 85,
     "totalErrors": 0
   },
   "nodes": [
     {
       "id": "App.jsx",
-      "type": "file"
+      "name": "App.jsx",
+      "type": "file",
+      "extension": ".jsx",
+      "cluster": "core",
+      "loc": {
+        "total": 6,
+        "code": 5,
+        "comment": 0,
+        "blank": 1
+      },
+      "tokenCount": 28,
+      "complexity": 1,
+      "inDegree": 0,
+      "outDegree": 2,
+      "blastRadius": {
+        "affectedFiles": [],
+        "affectedCount": 0,
+        "ratio": 0
+      },
+      "godFileScore": 2.1,
+      "riskLevel": "low",
+      "isGodFile": false
+    },
+    {
+      "id": "Badge.jsx",
+      "name": "Badge.jsx",
+      "type": "file",
+      "extension": ".jsx",
+      "cluster": "ui",
+      "loc": {
+        "total": 4,
+        "code": 3,
+        "comment": 0,
+        "blank": 1
+      },
+      "tokenCount": 17,
+      "complexity": 1,
+      "inDegree": 0,
+      "outDegree": 0,
+      "blastRadius": {
+        "affectedFiles": [],
+        "affectedCount": 0,
+        "ratio": 0
+      },
+      "godFileScore": 0.4,
+      "riskLevel": "low",
+      "isGodFile": false
+    },
+    {
+      "id": "dataEngine.js",
+      "name": "dataEngine.js",
+      "type": "file",
+      "extension": ".js",
+      "cluster": "module",
+      "loc": {
+        "total": 44,
+        "code": 39,
+        "comment": 0,
+        "blank": 5
+      },
+      "tokenCount": 222,
+      "complexity": 14,
+      "inDegree": 0,
+      "outDegree": 3,
+      "blastRadius": {
+        "affectedFiles": [],
+        "affectedCount": 0,
+        "ratio": 0
+      },
+      "godFileScore": 8.5,
+      "riskLevel": "high",
+      "isGodFile": false
     },
     {
       "id": "Graph.jsx",
-      "type": "file"
+      "name": "Graph.jsx",
+      "type": "file",
+      "extension": ".jsx",
+      "cluster": "ui",
+      "loc": {
+        "total": 3,
+        "code": 3,
+        "comment": 0,
+        "blank": 0
+      },
+      "tokenCount": 12,
+      "complexity": 1,
+      "inDegree": 1,
+      "outDegree": 0,
+      "blastRadius": {
+        "affectedFiles": [
+          "App.jsx"
+        ],
+        "affectedCount": 1,
+        "ratio": 0.17
+      },
+      "godFileScore": 1.9,
+      "riskLevel": "low",
+      "isGodFile": false
+    },
+    {
+      "id": "serviceA.js",
+      "name": "serviceA.js",
+      "type": "file",
+      "extension": ".js",
+      "cluster": "module",
+      "loc": {
+        "total": 9,
+        "code": 7,
+        "comment": 0,
+        "blank": 2
+      },
+      "tokenCount": 36,
+      "complexity": 2,
+      "inDegree": 2,
+      "outDegree": 1,
+      "blastRadius": {
+        "affectedFiles": [
+          "dataEngine.js",
+          "serviceB.js"
+        ],
+        "affectedCount": 2,
+        "ratio": 0.33
+      },
+      "godFileScore": 4.7,
+      "riskLevel": "low",
+      "isGodFile": false
+    },
+    {
+      "id": "serviceB.js",
+      "name": "serviceB.js",
+      "type": "file",
+      "extension": ".js",
+      "cluster": "module",
+      "loc": {
+        "total": 9,
+        "code": 7,
+        "comment": 0,
+        "blank": 2
+      },
+      "tokenCount": 34,
+      "complexity": 2,
+      "inDegree": 2,
+      "outDegree": 1,
+      "blastRadius": {
+        "affectedFiles": [
+          "dataEngine.js",
+          "serviceA.js"
+        ],
+        "affectedCount": 2,
+        "ratio": 0.33
+      },
+      "godFileScore": 4.7,
+      "riskLevel": "low",
+      "isGodFile": false
     },
     {
       "id": "utils.js",
-      "type": "file"
+      "name": "utils.js",
+      "type": "file",
+      "extension": ".js",
+      "cluster": "module",
+      "loc": {
+        "total": 5,
+        "code": 4,
+        "comment": 0,
+        "blank": 1
+      },
+      "tokenCount": 20,
+      "complexity": 1,
+      "inDegree": 2,
+      "outDegree": 0,
+      "blastRadius": {
+        "affectedFiles": [
+          "App.jsx",
+          "dataEngine.js"
+        ],
+        "affectedCount": 2,
+        "ratio": 0.33
+      },
+      "godFileScore": 3.4,
+      "riskLevel": "low",
+      "isGodFile": false
     }
   ],
   "edges": [
@@ -25,14 +202,60 @@
       "source": "App.jsx",
       "target": "Graph.jsx",
       "type": "import",
-      "line": 1
+      "line": 1,
+      "isDynamic": false,
+      "isCircular": false
     },
     {
       "source": "App.jsx",
       "target": "utils.js",
       "type": "import",
-      "line": 2
+      "line": 2,
+      "isDynamic": false,
+      "isCircular": false
     },
+    {
+      "source": "dataEngine.js",
+      "target": "utils.js",
+      "type": "import",
+      "line": 1,
+      "isDynamic": false,
+      "isCircular": false
+    },
+    {
+      "source": "dataEngine.js",
+      "target": "serviceA.js",
+      "type": "import",
+      "line": 2,
+      "isDynamic": false,
+      "isCircular": false
+    },
+    {
+      "source": "dataEngine.js",
+      "target": "serviceB.js",
+      "type": "import",
+      "line": 3,
+      "isDynamic": false,
+      "isCircular": false
+    },
+    {
+      "source": "serviceA.js",
+      "target": "serviceB.js",
+      "type": "import",
+      "line": 1,
+      "isDynamic": false,
+      "isCircular": true
+    },
+    {
+      "source": "serviceB.js",
+      "target": "serviceA.js",
+      "type": "import",
+      "line": 1,
+      "isDynamic": false,
+      "isCircular": true
+    }
+  ],
+  "callEdges": [
     {
       "source": "App.jsx::App",
       "target": "Graph",
@@ -46,40 +269,240 @@
       "line": 5
     },
     {
+      "source": "dataEngine.js::handleComplexDataPipeline",
+      "target": "result.push",
+      "type": "calls",
+      "line": 15
+    },
+    {
+      "source": "dataEngine.js::handleComplexDataPipeline",
+      "target": "processA",
+      "type": "calls",
+      "line": 15
+    },
+    {
+      "source": "dataEngine.js::handleComplexDataPipeline",
+      "target": "result.push",
+      "type": "calls",
+      "line": 17
+    },
+    {
+      "source": "dataEngine.js::handleComplexDataPipeline",
+      "target": "processB",
+      "type": "calls",
+      "line": 17
+    },
+    {
+      "source": "dataEngine.js::handleComplexDataPipeline",
+      "target": "result.push",
+      "type": "calls",
+      "line": 19
+    },
+    {
+      "source": "dataEngine.js::handleComplexDataPipeline",
+      "target": "formatData",
+      "type": "calls",
+      "line": 19
+    },
+    {
+      "source": "dataEngine.js::handleComplexDataPipeline",
+      "target": "result.push",
+      "type": "calls",
+      "line": 28
+    },
+    {
+      "source": "dataEngine.js::handleComplexDataPipeline",
+      "target": "result.push",
+      "type": "calls",
+      "line": 31
+    },
+    {
+      "source": "dataEngine.js::handleComplexDataPipeline",
+      "target": "result.push",
+      "type": "calls",
+      "line": 34
+    },
+    {
+      "source": "dataEngine.js::handleComplexDataPipeline",
+      "target": "result.push",
+      "type": "calls",
+      "line": 37
+    },
+    {
+      "source": "serviceA.js::processA",
+      "target": "processB",
+      "type": "calls",
+      "line": 5
+    },
+    {
+      "source": "serviceB.js::processB",
+      "target": "processA",
+      "type": "calls",
+      "line": 7
+    },
+    {
       "source": "utils.js::formatData",
       "target": "value.trim",
       "type": "calls",
       "line": 2
     }
   ],
+  "circularCycles": [
+    [
+      "serviceA.js",
+      "serviceB.js",
+      "serviceA.js"
+    ]
+  ],
+  "hotspots": [
+    {
+      "file": "dataEngine.js",
+      "score": 8.5,
+      "riskLevel": "high",
+      "complexity": 14,
+      "inDegree": 0,
+      "outDegree": 3,
+      "loc": 39,
+      "reason": "HIGH RISK: 0 dependants, 14 cyclomatic complexity, 39 LOC."
+    }
+  ],
+  "onboarding": {
+    "goodFirstIssues": [
+      {
+        "file": "App.jsx",
+        "name": "App.jsx",
+        "complexity": 1,
+        "loc": 5,
+        "blastRatio": 0,
+        "recommendation": "Safe, isolated module ideal for newcomer PRs (minimal blast radius)."
+      },
+      {
+        "file": "Badge.jsx",
+        "name": "Badge.jsx",
+        "complexity": 1,
+        "loc": 3,
+        "blastRatio": 0,
+        "recommendation": "Safe, isolated module ideal for newcomer PRs (minimal blast radius)."
+      },
+      {
+        "file": "Graph.jsx",
+        "name": "Graph.jsx",
+        "complexity": 1,
+        "loc": 3,
+        "blastRatio": 0.17,
+        "recommendation": "Safe, isolated module ideal for newcomer PRs (minimal blast radius)."
+      }
+    ],
+    "coreHubs": []
+  },
   "symbols": [
     {
       "id": "App.jsx::App",
       "name": "App",
       "type": "function",
       "file": "App.jsx",
-      "line": 4
+      "line": 4,
+      "endLine": 6,
+      "isExported": true,
+      "paramsCount": 0,
+      "params": [],
+      "complexity": 1
+    },
+    {
+      "id": "Badge.jsx::Badge",
+      "name": "Badge",
+      "type": "function",
+      "file": "Badge.jsx",
+      "line": 1,
+      "endLine": 3,
+      "isExported": true,
+      "paramsCount": 1,
+      "params": [
+        "param"
+      ],
+      "complexity": 1
+    },
+    {
+      "id": "dataEngine.js::handleComplexDataPipeline",
+      "name": "handleComplexDataPipeline",
+      "type": "function",
+      "file": "dataEngine.js",
+      "line": 5,
+      "endLine": 43,
+      "isExported": true,
+      "paramsCount": 2,
+      "params": [
+        "data",
+        "options"
+      ],
+      "complexity": 14
     },
     {
       "id": "Graph.jsx::Graph",
       "name": "Graph",
       "type": "function",
       "file": "Graph.jsx",
-      "line": 1
+      "line": 1,
+      "endLine": 3,
+      "isExported": true,
+      "paramsCount": 1,
+      "params": [
+        "data"
+      ],
+      "complexity": 1
+    },
+    {
+      "id": "serviceA.js::processA",
+      "name": "processA",
+      "type": "function",
+      "file": "serviceA.js",
+      "line": 3,
+      "endLine": 8,
+      "isExported": true,
+      "paramsCount": 1,
+      "params": [
+        "input"
+      ],
+      "complexity": 2
+    },
+    {
+      "id": "serviceB.js::processB",
+      "name": "processB",
+      "type": "function",
+      "file": "serviceB.js",
+      "line": 3,
+      "endLine": 8,
+      "isExported": true,
+      "paramsCount": 1,
+      "params": [
+        "input"
+      ],
+      "complexity": 2
     },
     {
       "id": "utils.js::formatData",
       "name": "formatData",
       "type": "function",
       "file": "utils.js",
-      "line": 1
+      "line": 1,
+      "endLine": 3,
+      "isExported": true,
+      "paramsCount": 1,
+      "params": [
+        "value"
+      ],
+      "complexity": 1
     },
     {
       "id": "utils.js::DataFormatter",
       "name": "DataFormatter",
       "type": "class",
       "file": "utils.js",
-      "line": 5
+      "line": 5,
+      "endLine": 5,
+      "isExported": true,
+      "paramsCount": 0,
+      "params": []
     }
   ],
   "functionCalls": [
@@ -94,6 +517,78 @@
       "caller": "App",
       "callee": "formatData",
       "line": 5
+    },
+    {
+      "file": "dataEngine.js",
+      "caller": "handleComplexDataPipeline",
+      "callee": "result.push",
+      "line": 15
+    },
+    {
+      "file": "dataEngine.js",
+      "caller": "handleComplexDataPipeline",
+      "callee": "processA",
+      "line": 15
+    },
+    {
+      "file": "dataEngine.js",
+      "caller": "handleComplexDataPipeline",
+      "callee": "result.push",
+      "line": 17
+    },
+    {
+      "file": "dataEngine.js",
+      "caller": "handleComplexDataPipeline",
+      "callee": "processB",
+      "line": 17
+    },
+    {
+      "file": "dataEngine.js",
+      "caller": "handleComplexDataPipeline",
+      "callee": "result.push",
+      "line": 19
+    },
+    {
+      "file": "dataEngine.js",
+      "caller": "handleComplexDataPipeline",
+      "callee": "formatData",
+      "line": 19
+    },
+    {
+      "file": "dataEngine.js",
+      "caller": "handleComplexDataPipeline",
+      "callee": "result.push",
+      "line": 28
+    },
+    {
+      "file": "dataEngine.js",
+      "caller": "handleComplexDataPipeline",
+      "callee": "result.push",
+      "line": 31
+    },
+    {
+      "file": "dataEngine.js",
+      "caller": "handleComplexDataPipeline",
+      "callee": "result.push",
+      "line": 34
+    },
+    {
+      "file": "dataEngine.js",
+      "caller": "handleComplexDataPipeline",
+      "callee": "result.push",
+      "line": 37
+    },
+    {
+      "file": "serviceA.js",
+      "caller": "processA",
+      "callee": "processB",
+      "line": 5
+    },
+    {
+      "file": "serviceB.js",
+      "caller": "processB",
+      "callee": "processA",
+      "line": 7
     },
     {
       "file": "utils.js",
