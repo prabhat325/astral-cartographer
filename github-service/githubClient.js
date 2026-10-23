@@ -1,7 +1,9 @@
+
 const { Octokit } = require("@octokit/rest");
 
-const octokit = new Octokit();
-
+const octokit = new Octokit({
+    auth: process.env.GITHUB_TOKEN
+});
 function parseGitHubUrl(repoUrl) {
     const url = new URL(repoUrl);
 
