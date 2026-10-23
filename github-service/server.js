@@ -17,17 +17,45 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
     res.json({
-        message: "Astral Cartographer GitHub Service is running"
+        message: "Astral Cartographer Backend Service is running"
     });
 });
 
-app.post("/analyze", async (req, res) => {
+async function handleAnalyze(req, res) {
     try {
         const { repoUrl } = req.body;
 
-        if (!repoUrl) {
+        if (!req.body || typeof req.body !== "object") {
             return res.status(400).json({
-                error: "Repository URL is required"
+                success: false,
+                error: "Request body must be a JSON object"
+            });
+        }
+
+        if (typeof repoUrl !== "string" || !repoUrl.trim()) {
+            return res.status(400).json({
+                success: false,
+                error: "A valid repoUrl is required"
+            });
+        }
+
+        let parsedUrl;
+        try {
+            parsedUrl = new URL(repoUrl);
+        } catch {
+            return res.status(400).json({
+                success: false,
+                error: "Invalid URL format"
+            });
+        }
+
+        if (
+            parsedUrl.protocol !== "https:" ||
+            parsedUrl.hostname !== "github.com"
+        ) {
+            return res.status(400).json({
+                success: false,
+                error: "Please provide a valid GitHub repository URL"
             });
         }
 
@@ -47,27 +75,33 @@ app.post("/analyze", async (req, res) => {
 
         const architecture = analyzeFiles(files);
 
-        res.json({
+        return res.json({
+            success: true,
             repository: {
                 name: repository.name,
                 fullName: repository.full_name,
                 description: repository.description
             },
+            totalFiles: files.length,
             files,
             architecture
         });
 
     } catch (error) {
-        console.error(error);
+        console.error("Analysis request failed:", error.message);
 
-        res.status(500).json({
+        return res.status(500).json({
+            success: false,
             error: error.message
         });
     }
-});
+}
 
+// Support both /analyze and /api/analyze endpoints
+app.post("/analyze", handleAnalyze);
+app.post("/api/analyze", handleAnalyze);
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
