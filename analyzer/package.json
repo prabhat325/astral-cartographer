@@ -6,13 +6,21 @@
   "scripts": {
     "analyze": "node src/cli.js",
     "serve": "node src/server.js",
-    "test": "node src/testGraph.js"
+    "test": "node src/testGraph.js",
+    "test:shreya": "node testAnalyzer.js"
   },
-  "keywords": ["ast", "architecture-engine", "dependency-graph", "cyclomatic-complexity", "circular-dependency"],
+  "keywords": [
+    "ast",
+    "architecture-engine",
+    "dependency-graph",
+    "cyclomatic-complexity",
+    "circular-dependency"
+  ],
   "author": "",
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "@babel/parser": "^8.0.7"
+    "@babel/parser": "^8.0.7",
+    "@babel/traverse": "^8.0.7"
   }
 }
