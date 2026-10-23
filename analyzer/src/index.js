@@ -13,7 +13,7 @@ import { buildGraph } from "./graphBuilder.js";
  * Core analysis engine that processes a collection of files.
  * @param {Array<{path: string, content: string}>} files
  */
-export async function analyzeFiles(files) {
+export function analyzeFiles(files) {
   const importsByFile = {};
   const symbols = [];
   const functionCalls = [];
