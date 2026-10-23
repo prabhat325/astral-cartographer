@@ -1,12 +1,14 @@
 {
   "name": "analyzer",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Code Analyzer & Architecture Engine for Astral Cartographer (PS6)",
+  "main": "src/index.js",
   "scripts": {
-  "analyze": "node src/cli.js"
-},
-  "keywords": [],
+    "analyze": "node src/cli.js",
+    "serve": "node src/server.js",
+    "test": "node src/testGraph.js"
+  },
+  "keywords": ["ast", "architecture-engine", "dependency-graph", "cyclomatic-complexity", "circular-dependency"],
   "author": "",
   "license": "ISC",
   "type": "module",
