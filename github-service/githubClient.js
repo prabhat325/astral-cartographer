@@ -1,9 +1,25 @@
+require("dotenv").config();
 
 const { Octokit } = require("@octokit/rest");
 
 const octokit = new Octokit({
     auth: process.env.GITHUB_TOKEN
 });
+
+// Check whether token is loaded and verify auth
+console.log("GitHub token loaded:", Boolean(process.env.GITHUB_TOKEN));
+
+async function checkAuth() {
+    if (process.env.GITHUB_TOKEN) {
+        const response = await octokit.rest.users.getAuthenticated();
+        console.log("Authenticated as:", response.data.login);
+    }
+}
+
+checkAuth().catch(error => {
+    console.log("Auth check warning:", error.message);
+});
+
 function parseGitHubUrl(repoUrl) {
     const url = new URL(repoUrl);
 
