@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {"darkMode":"class","theme":{"extend":{"colors":{"secondary-container":"#98a9ff","on-primary":"#ffffff","surface-variant":"#dee2f0","surface-container-high":"#e4e8f6","primary-container":"#5b6fc6","on-background":"#171c25","surface-container":"#e9eefb","error-container":"#ffdad6","surface":"#f9f9ff","on-secondary-container":"#283a8a","secondary":"#4758a9","error":"#ba1a1a","on-tertiary-fixed":"#271900","on-surface":"#171c25","surface-container-low":"#f0f3ff","surface-tint":"#4458ae","background":"#f9f9ff","on-primary-container":"#fffbff","secondary-fixed":"#dde1ff","inverse-primary":"#b8c3ff","surface-bright":"#f9f9ff","secondary-fixed-dim":"#b9c3ff","on-error-container":"#93000a","primary-fixed":"#dde1ff","outline-variant":"#c5c5d3","tertiary-fixed":"#ffdea8","surface-dim":"#d6dae7","on-tertiary-container":"#fffbff","primary-fixed-dim":"#b8c3ff","on-tertiary":"#ffffff","on-secondary":"#ffffff","inverse-on-surface":"#ecf0fe","on-primary-fixed":"#001355","tertiary-container":"#996d00","on-secondary-fixed-variant":"#2e408f","outline":"#757683","inverse-surface":"#2b303b","surface-container-lowest":"#ffffff","tertiary-fixed-dim":"#f6bd50","tertiary":"#795600","on-error":"#ffffff","on-tertiary-fixed-variant":"#5e4200","on-primary-fixed-variant":"#2a3f94","on-secondary-fixed":"#001257","surface-container-highest":"#dee2f0","primary":"#4156ab","on-surface-variant":"#454652"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-sm":"0.5rem","gutter":"1.5rem","space-md":"1rem","space-xl":"2.5rem","space-lg":"1.5rem","margin":"2rem","margin-mobile":"1rem","gutter-mobile":"0.75rem","space-xs":"0.25rem"},"fontFamily":{"body-sm":["Inter"],"display":["Inter"],"headline-lg-mobile":["Inter"],"code-md":["JetBrains Mono"],"label-sm":["Inter"],"body-md":["Inter"],"code-sm":["JetBrains Mono"],"body-lg":["Inter"],"label-md":["Inter"],"headline-sm":["Inter"],"headline-md":["Inter"],"headline-lg":["Inter"]},"fontSize":{"body-sm":["13px",{"lineHeight":"18px","letterSpacing":"0em","fontWeight":"400"}],"display":["36px",{"lineHeight":"44px","letterSpacing":"-0.025em","fontWeight":"600"}],"headline-lg-mobile":["22px",{"lineHeight":"30px","letterSpacing":"-0.015em","fontWeight":"600"}],"code-md":["13px",{"lineHeight":"20px","letterSpacing":"-0.005em","fontWeight":"400"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"600"}],"body-md":["14px",{"lineHeight":"22px","letterSpacing":"0em","fontWeight":"400"}],"code-sm":["11px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"500"}],"body-lg":["16px",{"lineHeight":"26px","letterSpacing":"-0.005em","fontWeight":"400"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"500"}],"headline-sm":["16px",{"lineHeight":"24px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-md":["20px",{"lineHeight":"28px","letterSpacing":"-0.015em","fontWeight":"600"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.02em","fontWeight":"600"}]}}}};</script></head><body class="bg-background font-body-md text-on-surface min-h-screen"><header class="fixed top-0 left-0 w-full z-50 bg-surface-container-lowest shadow-[0_1px_8px_rgba(37,42,52,0.04)]"><div class="h-16 w-full px-gutter flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg"><div class="flex items-center gap-space-sm"><img alt="Astral Cartographer Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VnZkr-_EWGmpw3cfYdaB0v_JtKu1d_mUG5HsWwSYOae8CG3J69g4K5OlirCDCoht3xo7wLI4YUeTkHWPFR_mA0NZYiEn1Pbvemmn35D10AzpOrSrBa_yfYInux3w0rQ56hi9KCLRk97oF-o0tErdhxJSKQoCa74hxEdLUrGX12tI03n8szy9MSFeHIfPl_837UZIklTilmYsdP9PN0_usGNeqK-tOnuU913OZeRUGo"/><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight">Astral Cartographer</span><span class="font-label-sm text-label-sm px-space-xs py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-medium">v1.2 Beta</span></div><div class="h-4 w-px bg-outline-variant hidden xl:block"></div><div class="hidden xl:flex items-center gap-space-sm px-space-sm py-1 rounded-full bg-surface-container text-on-surface font-code-sm text-code-sm"><span class="w-2 h-2 rounded-full bg-emerald-500"></span><span class="font-medium">astral-sh / ruff</span><span class="text-outline">:</span><span class="text-on-surface-variant">main</span></div></div><nav class="flex items-center gap-space-xs" data-active-classes="bg-surface-container-highest text-on-surface font-headline-sm"><a aria-current="page" class="px-space-md py-space-sm rounded-lg transition-colors bg-surface-container-highest text-on-surface font-headline-sm" data-path="home" href="#">New Analysis</a><a class="px-space-md py-space-sm rounded-lg font-body-sm text-body-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="overview" href="#">Overview</a><a class="px-space-md py-space-sm rounded-lg font-body-sm text-body-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="dependency-explorer" href="#">Dependency Explorer</a><a class="px-space-md py-space-sm rounded-lg font-body-sm text-body-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="code-explorer" href="#">Code Explorer</a><a class="flex items-center gap-space-xs px-space-md py-space-sm rounded-lg font-body-sm text-body-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="architecture-health" href="#"><span>Architecture Health</span><span class="px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-800 font-label-sm text-label-sm">3 warnings</span></a></nav><div class="flex items-center gap-space-sm"><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface px-space-sm py-1 hidden sm:inline-flex" data-path="docs" href="#">Documentation</a><a aria-label="GitHub Repository" class="w-9 h-9 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" href="https://github.com" rel="noreferrer" target="_blank"><span class="material-symbols-outlined text-[20px]">code</span></a><a aria-label="Settings" class="w-9 h-9 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="settings" href="#"><span class="material-symbols-outlined text-[20px]">settings</span></a><img alt="Profile" class="w-8 h-8 rounded-full object-cover ml-space-xs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDN2IsJw7GhLEwHM62WJmpDpJh--9S19jCRXW0s7H1b-6R3L1VxS9M2YNZhyPSYQt5ZJXyxE_ZNqHmSrj-GfYijlaaGnNtcVClMBpgl-h_uVK1txk3q5oKLK3_4HsEi_kRqT9SE7eWaAP5HsnudNyDDat1Nx--cyWw-G8Evr0N0H18fridOQIskY5aoaxndc_mxWdOoldfPI6GgcD0OhqvVpDvOGcFz1bCPYTYmAhgw"/></div></div></header><main class="w-full pt-16 bg-background min-h-[calc(100vh-4rem)]"><div class="flex flex-col w-full">
+<!-- Interactive Workbench Notification Banner -->
+<div class="w-full bg-surface-container-low py-space-sm px-gutter">
+<div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-space-sm text-on-surface-variant font-body-sm text-body-sm">
+<div class="flex items-center gap-space-sm">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-code-sm text-code-sm uppercase tracking-wide text-primary">Engine Active</span>
+<span>•</span>
+<span>Rust parser v0.4.9 loaded with full sub-crate traversal</span>
+</div>
+<div class="flex items-center gap-space-md">
+<span class="font-code-sm text-code-sm">Worker cluster: <strong class="text-on-surface font-medium">us-east-metal-04</strong></span>
+<span class="text-outline-variant">|</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-primary">bolt</span> 14.8M AST nodes/sec</span>
+</div>
+</div>
+</div>
+<!-- Main Portal Section -->
+<section class="w-full px-gutter py-space-xl flex flex-col items-center justify-center relative">
+<!-- Subtle architectural backdrop accents -->
+<div class="absolute top-12 left-1/2 -translate-x-1/2 w-full max-w-5xl h-96 bg-gradient-to-b from-surface-container-high/40 to-transparent pointer-events-none rounded-full blur-3xl -z-10"></div>
+<!-- Editorial Header Block -->
+<div class="max-w-3xl w-full text-center flex flex-col items-center gap-space-md mb-space-xl">
+<div class="inline-flex items-center gap-space-xs px-space-md py-1 rounded-full bg-secondary-container/30 text-on-secondary-container font-label-sm text-label-sm tracking-wider uppercase">
+<span class="material-symbols-outlined text-[14px]">account_tree</span>
+        AST Architecture Analyzer
+      </div>
+<h1 class="font-display text-display text-on-surface tracking-tight text-center max-w-2xl">
+        Understand your codebase.
+      </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant text-center max-w-xl">
+        Visualize architectural boundaries, trace file dependencies, and isolate structural circularities across your repository in seconds.
+      </p>
+</div>
+<!-- Primary Action Card (Workbench Ingestion Deck) -->
+<div class="w-full max-w-3xl bg-surface-container-lowest rounded-xl shadow-md p-space-lg flex flex-col gap-space-lg relative">
+<!-- Top URL Bar with Branch Selector -->
+<form class="flex flex-col gap-space-md" id="repo-analyze-form" onsubmit="event.preventDefault(); triggerAnalysisAnimation();">
+<div class="flex flex-col md:flex-row items-stretch gap-space-sm">
+<!-- Input Group -->
+<div class="flex-1 flex items-center bg-surface-container-lowest rounded-lg shadow-sm px-space-md py-space-xs focus-within:shadow-[0_0_0_3px_rgba(65,86,171,0.15)] transition-all">
+<span class="material-symbols-outlined text-outline text-[22px] mr-space-sm select-none">code</span>
+<span class="font-code-sm text-code-sm text-outline-variant mr-1 hidden sm:inline">github.com/</span>
+<input aria-label="Repository slug or URL" class="w-full bg-transparent font-code-md text-code-md text-on-surface placeholder:text-outline focus:outline-none" id="repo-input" placeholder="organization/repository" type="text" value="astral-sh/ruff"/>
+<button class="text-outline hover:text-on-surface p-1 rounded-full" onclick="document.getElementById('repo-input').value=''" type="button">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+</div>
+<!-- Branch Dropdown -->
+<div class="relative min-w-[120px]">
+<select class="w-full appearance-none bg-surface-container-low font-code-sm text-code-sm text-on-surface py-3 px-space-md pr-8 rounded-lg cursor-pointer focus:outline-none hover:bg-surface-container transition-colors" id="branch-select">
+<option selected="" value="main">branch: main</option>
+<option value="dev">branch: dev</option>
+<option value="v0.4.x">tag: v0.4.x</option>
+<option value="experimental">branch: experimental</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-[18px] text-outline pointer-events-none">expand_more</span>
+</div>
+<!-- Submit Button -->
+<button class="bg-primary hover:bg-primary-container active:bg-secondary text-on-primary font-body-md text-body-md font-medium px-space-lg py-3 rounded-lg shadow-sm flex items-center justify-center gap-space-xs transition-all whitespace-nowrap" id="analyze-btn" type="submit">
+<span id="btn-label">Analyze Repository</span>
+<span class="material-symbols-outlined text-[20px] transition-transform group-hover:translate-x-0.5">arrow_forward</span>
+</button>
+</div>
+<!-- Quick Start Repository Pills -->
+<div class="flex flex-wrap items-center gap-space-xs pt-space-xs">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Try with examples:</span>
+<button class="font-code-sm text-code-sm px-space-sm py-0.5 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors" onclick="setExampleRepo('astral-sh/ruff')" type="button">astral-sh/ruff</button>
+<button class="font-code-sm text-code-sm px-space-sm py-0.5 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors" onclick="setExampleRepo('fastapi/fastapi')" type="button">fastapi/fastapi</button>
+<button class="font-code-sm text-code-sm px-space-sm py-0.5 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors" onclick="setExampleRepo('expressjs/express')" type="button">expressjs/express</button>
+<button class="font-code-sm text-code-sm px-space-sm py-0.5 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors" onclick="setExampleRepo('vercel/turborepo')" type="button">vercel/turborepo</button>
+</div>
+</form>
+<!-- Status Bar and Micro-Telemetry -->
+<div class="bg-surface-container-low rounded-lg p-space-md flex flex-col gap-space-sm">
+<div class="flex items-center justify-between text-on-surface font-body-sm text-body-sm">
+<div class="flex items-center gap-space-sm">
+<span class="w-2.5 h-2.5 rounded-full bg-primary" id="pulse-indicator"></span>
+<span class="font-medium" id="status-text">Ready to index AST trees and call graphs</span>
+</div>
+<span class="font-code-sm text-code-sm text-on-surface-variant" id="time-estimate">Est: ~2.4s for full workspace</span>
+</div>
+<!-- Dynamic Process Progress Bar -->
+<div class="w-full h-1.5 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-300 w-0" id="index-progress"></div>
+</div>
+<!-- Granular flags -->
+<div class="flex flex-wrap items-center justify-between gap-space-xs pt-1 text-on-surface-variant font-code-sm text-code-sm">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-outline">check</span> Synced with GitHub REST & GraphQL v4</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-outline">check</span> Zero telemetry retention</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-outline">lock</span> Public & Private repos supported</span>
+</div>
+</div>
+</div>
+<!-- Active Visual Architecture Metric Strip -->
+<div class="max-w-3xl w-full grid grid-cols-2 sm:grid-cols-4 gap-space-md mt-space-md">
+<div class="bg-surface-container-lowest p-space-md rounded-lg shadow-sm flex flex-col">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Indexed Crates</span>
+<div class="flex items-baseline gap-space-xs mt-1">
+<span class="font-headline-md text-headline-md text-on-surface">34</span>
+<span class="font-code-sm text-code-sm text-on-surface-variant">packages</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1">100% modular resolution</span>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-lg shadow-sm flex flex-col">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Cycle Risk Ratio</span>
+<div class="flex items-baseline gap-space-xs mt-1">
+<span class="font-headline-md text-headline-md text-on-surface">0.02%</span>
+<span class="font-code-sm text-code-sm text-primary font-medium">Optimal</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1">No god-nodes detected</span>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-lg shadow-sm flex flex-col">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Total Source Files</span>
+<div class="flex items-baseline gap-space-xs mt-1">
+<span class="font-headline-md text-headline-md text-on-surface">1,894</span>
+<span class="font-code-sm text-code-sm text-on-surface-variant">.rs files</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1">Parsed in 1.48 seconds</span>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-lg shadow-sm flex flex-col">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Health Rating</span>
+<div class="flex items-baseline gap-space-xs mt-1">
+<span class="font-headline-md text-headline-md text-on-surface">98/100</span>
+<span class="font-label-sm text-label-sm text-emerald-700 bg-emerald-100 px-1 rounded">AAA</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1">Loose module coupling</span>
+</div>
+</div>
+</section>
+<!-- 3-Column Core Capabilities Section -->
+<section class="w-full px-gutter py-space-xl bg-surface-container-lowest">
+<div class="max-w-6xl mx-auto flex flex-col gap-space-lg">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-sm">
+<div>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-semibold">Engine Taxonomy</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mt-1">Deterministic Architecture Mapping</h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-md">
+          A high-fidelity pipeline transforming raw Abstract Syntax Trees into interactive spatial maps without hallucination.
+        </p>
+</div>
+<!-- Feature Bento Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-lg mt-space-sm">
+<!-- Feature 1: Dependency Mapping -->
+<div class="bg-surface rounded-xl p-space-lg shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex flex-col gap-space-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[28px]">hub</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Dependency Mapping</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              Interactive AST-powered graph visualizing imports, module hierarchies, and cross-package dependencies without clutter.
+            </p>
+<!-- Inline Mini Graph SVG Visualization -->
+<div class="w-full h-32 bg-surface-container-lowest rounded-lg p-space-sm flex items-center justify-center overflow-hidden">
+<svg class="w-full h-full text-primary" fill="none" viewbox="0 0 280 100" xmlns="http://www.w3.org/2000/svg">
+<!-- Directed dependency edges -->
+<path d="M 50 50 C 90 20, 110 20, 150 30" stroke="currentColor" stroke-dasharray="3 3" stroke-opacity="0.3" stroke-width="1.5"></path>
+<path d="M 50 50 C 90 80, 110 80, 150 70" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5"></path>
+<path d="M 150 30 C 180 30, 200 45, 230 50" stroke="currentColor" stroke-opacity="0.6" stroke-width="2"></path>
+<path d="M 150 70 C 180 70, 200 55, 230 50" stroke="currentColor" stroke-opacity="0.6" stroke-width="2"></path>
+<!-- Nodes -->
+<circle class="fill-surface-container" cx="50" cy="50" r="14" stroke="currentColor" stroke-width="2"></circle>
+<text class="fill-on-surface font-code-sm text-[9px] font-bold" text-anchor="middle" x="50" y="53">ruff</text>
+<circle class="fill-surface-container-low" cx="150" cy="30" r="12" stroke="currentColor" stroke-width="1.5"></circle>
+<text class="fill-on-surface font-code-sm text-[8px]" text-anchor="middle" x="150" y="33">parser</text>
+<circle class="fill-surface-container-low" cx="150" cy="70" r="12" stroke="currentColor" stroke-width="1.5"></circle>
+<text class="fill-on-surface font-code-sm text-[8px]" text-anchor="middle" x="150" y="73">linter</text>
+<circle class="fill-primary-container" cx="230" cy="50" r="16" stroke="currentColor" stroke-width="2"></circle>
+<text class="fill-on-primary font-code-sm text-[10px] font-bold" text-anchor="middle" x="230" y="54">ast</text>
+</svg>
+</div>
+</div>
+<div class="pt-space-md flex items-center justify-between text-on-surface font-body-sm text-body-sm">
+<span class="font-code-sm text-code-sm text-outline">Layer-ordered hierarchy</span>
+<span class="material-symbols-outlined text-[18px] text-primary">arrow_outward</span>
+</div>
+</div>
+<!-- Feature 2: Code Insights -->
+<div class="bg-surface rounded-xl p-space-lg shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex flex-col gap-space-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[28px]">data_object</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Code Insights</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              Deep static analysis extracting function call chains, exported symbol tables, and coupling metrics per module.
+            </p>
+<!-- Monospaced Code Symbol Snippet Mockup -->
+<div class="w-full h-32 bg-surface-container-lowest rounded-lg p-space-sm flex flex-col justify-center gap-1 font-code-sm text-code-sm overflow-hidden">
+<div class="flex items-center justify-between text-outline">
+<span class="text-[10px]">crates/ruff_linter/src/rules</span>
+<span class="text-[10px] text-primary font-semibold">Afferent: 14</span>
+</div>
+<div class="p-1.5 rounded bg-surface-container-low flex items-center justify-between">
+<span class="text-on-surface text-[11px] font-medium truncate">pub struct RuleGroup</span>
+<span class="text-outline text-[10px]">6 calls</span>
+</div>
+<div class="p-1.5 rounded bg-surface-container-low flex items-center justify-between">
+<span class="text-on-surface text-[11px] font-medium truncate">fn check_ast_nodes(...)</span>
+<span class="text-outline text-[10px]">38 callers</span>
+</div>
+</div>
+</div>
+<div class="pt-space-md flex items-center justify-between text-on-surface font-body-sm text-body-sm">
+<span class="font-code-sm text-code-sm text-outline">Cyclomatic indexing</span>
+<span class="material-symbols-outlined text-[18px] text-primary">arrow_outward</span>
+</div>
+</div>
+<!-- Feature 3: Architecture Health -->
+<div class="bg-surface rounded-xl p-space-lg shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex flex-col gap-space-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[28px]">verified</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Architecture Health</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              Immediate automated detection of cyclic imports, god-objects, orphan files, and high-afferent coupling risks.
+            </p>
+<!-- Visual Cyclic Warning Alert Module -->
+<div class="w-full h-32 bg-surface-container-lowest rounded-lg p-space-sm flex flex-col justify-center gap-2">
+<div class="flex items-center gap-space-xs px-2 py-1.5 rounded bg-amber-50 text-amber-900 font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-amber-700">warning</span>
+<span>Circular reference isolated in <strong>diagnostics.rs</strong></span>
+</div>
+<div class="flex items-center justify-between px-2 text-on-surface-variant font-code-sm text-code-sm">
+<span>Ref: parser ↔ diagnostics</span>
+<span class="text-error font-medium">Depth: 2</span>
+</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-amber-600 h-full w-3/4 rounded-full"></div>
+</div>
+</div>
+</div>
+<div class="pt-space-md flex items-center justify-between text-on-surface font-body-sm text-body-sm">
+<span class="font-code-sm text-code-sm text-outline">Real-time alerts</span>
+<span class="material-symbols-outlined text-[18px] text-primary">arrow_outward</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Interactive Sandbox & Architectural Artifacts Section -->
+<section class="w-full px-gutter py-space-xl bg-surface">
+<div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-space-xl">
+<div class="flex-1 flex flex-col gap-space-md">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-semibold">Visual Ergonomics</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Zero-lag Exploration for Gigabyte Codebases</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">
+          Engineered for rapid cognitive navigation. Isolate modules via semantic filters, highlight critical path boundaries, and export architecture documentation for engineering RFCs.
+        </p>
+<div class="flex flex-col gap-space-sm pt-space-xs font-body-md text-body-md text-on-surface">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">check_circle</span>
+<span>Instantly pinpoint circular dependency loops across deep file trees</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">check_circle</span>
+<span>Export SVG, Mermaid diagrams, and structural architecture JSON</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">check_circle</span>
+<span>Deterministic cache layer remembers builds between commits</span>
+</div>
+</div>
+<div class="pt-space-sm flex items-center gap-space-md">
+<button class="bg-surface-container-highest hover:bg-surface-container text-on-surface font-body-md text-body-md px-space-lg py-2.5 rounded-lg font-medium transition-colors" onclick="setExampleRepo('astral-sh/ruff'); triggerAnalysisAnimation();" type="button">
+            Inspect ruff Workspace
+          </button>
+<a class="font-body-md text-body-md text-primary hover:underline flex items-center gap-1" data-path="docs" href="#">
+<span>Read architecture handbook</span>
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</a>
+</div>
+</div>
+<!-- Rich Visual Artifact Card -->
+<div class="flex-1 w-full">
+<div class="w-full bg-surface-container-lowest rounded-xl shadow-md p-space-md flex flex-col gap-space-md">
+<!-- Terminal-style header -->
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-3 rounded-full bg-surface-container-highest"></span>
+<span class="w-3 h-3 rounded-full bg-surface-container-highest"></span>
+<span class="w-3 h-3 rounded-full bg-surface-container-highest"></span>
+<span class="font-code-sm text-code-sm text-outline ml-2">cartographer-ast-graph.spec</span>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container font-code-sm text-code-sm text-on-surface">wasm-canvas</span>
+</div>
+<!-- Stylized diagram rendering -->
+<div class="w-full aspect-[4/3] bg-surface-container-low rounded-lg p-space-md relative overflow-hidden flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-code-sm text-code-sm px-2 py-1 rounded bg-surface-container-lowest text-on-surface shadow-sm font-semibold">root crate: astral-sh/ruff</span>
+<span class="font-code-sm text-code-sm text-on-surface-variant">Tree Depth: 7 levels</span>
+</div>
+<!-- Stylized Node Canvas Map -->
+<div class="relative w-full h-full flex items-center justify-center my-space-xs">
+<div class="grid grid-cols-3 gap-space-md w-full max-w-sm">
+<div class="bg-surface-container-lowest p-2 rounded shadow-sm flex flex-col items-center justify-center text-center">
+<span class="material-symbols-outlined text-primary text-[18px]">folder</span>
+<span class="font-code-sm text-code-sm font-bold text-on-surface mt-1">ruff_cli</span>
+<span class="text-[9px] text-outline">12 dependencies</span>
+</div>
+<div class="bg-surface-container-lowest p-2 rounded shadow-sm flex flex-col items-center justify-center text-center">
+<span class="material-symbols-outlined text-primary text-[18px]">tune</span>
+<span class="font-code-sm text-code-sm font-bold text-on-surface mt-1">ruff_server</span>
+<span class="text-[9px] text-outline">LSP protocol</span>
+</div>
+<div class="bg-surface-container-lowest p-2 rounded shadow-sm flex flex-col items-center justify-center text-center">
+<span class="material-symbols-outlined text-secondary text-[18px]">rule</span>
+<span class="font-code-sm text-code-sm font-bold text-on-surface mt-1">ruff_linter</span>
+<span class="text-[9px] text-outline">85 rulesets</span>
+</div>
+</div>
+</div>
+<!-- Bottom status caption -->
+<div class="flex items-center justify-between font-code-sm text-code-sm text-on-surface-variant">
+<span>Dynamic force layout</span>
+<span class="text-primary font-medium">Rendered via WebGL Canvas</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Recent Analyses Strip -->
+<section class="w-full px-gutter py-space-xl bg-surface-container-low">
+<div class="max-w-6xl mx-auto flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-outline text-[20px]">history</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Recent Repository Analyses</h2>
+</div>
+<a class="font-body-sm text-body-sm text-primary hover:underline font-medium" href="#">View full activity history</a>
+</div>
+<!-- 3 Recent Analyses Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<!-- Item 1: astral-sh/ruff -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between gap-space-sm hover:shadow-md transition-shadow">
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-code-md text-code-md font-semibold text-on-surface truncate">astral-sh / ruff</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-emerald-800 bg-emerald-100 font-label-sm text-label-sm">
+                Clean
+              </span>
+</div>
+<span class="font-code-sm text-code-sm text-on-surface-variant">ref: refs/heads/main • Rust</span>
+</div>
+<div class="flex items-center justify-between pt-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<div class="flex items-center gap-1 font-code-sm text-code-sm">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+<span>Analyzed 2h ago</span>
+</div>
+<a class="text-primary hover:text-on-surface font-body-sm text-body-sm font-medium flex items-center gap-0.5" data-path="dependency-explorer" href="#">
+<span>Open</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</a>
+</div>
+</div>
+<!-- Item 2: fastapi/fastapi -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between gap-space-sm hover:shadow-md transition-shadow">
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-code-md text-code-md font-semibold text-on-surface truncate">fastapi / fastapi</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-amber-800 bg-amber-100 font-label-sm text-label-sm">
+                2 cycles
+              </span>
+</div>
+<span class="font-code-sm text-code-sm text-on-surface-variant">ref: refs/heads/master • Python</span>
+</div>
+<div class="flex items-center justify-between pt-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<div class="flex items-center gap-1 font-code-sm text-code-sm">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+<span>Analyzed 5h ago</span>
+</div>
+<a class="text-primary hover:text-on-surface font-body-sm text-body-sm font-medium flex items-center gap-0.5" data-path="dependency-explorer" href="#">
+<span>Open</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</a>
+</div>
+</div>
+<!-- Item 3: vercel/turborepo -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between gap-space-sm hover:shadow-md transition-shadow">
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-code-md text-code-md font-semibold text-on-surface truncate">vercel / turborepo</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-emerald-800 bg-emerald-100 font-label-sm text-label-sm">
+                Clean
+              </span>
+</div>
+<span class="font-code-sm text-code-sm text-on-surface-variant">ref: refs/tags/v1.13.0 • Go/Rust</span>
+</div>
+<div class="flex items-center justify-between pt-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<div class="flex items-center gap-1 font-code-sm text-code-sm">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+<span>Analyzed 1d ago</span>
+</div>
+<a class="text-primary hover:text-on-surface font-body-sm text-body-sm font-medium flex items-center gap-0.5" data-path="dependency-explorer" href="#">
+<span>Open</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Dynamic Client Scripts for Micro-Interactions -->
+<script>
+  function setExampleRepo(slug) {
+    const input = document.getElementById('repo-input');
+    if (input) {
+      input.value = slug;
+      input.focus();
+    }
+  }
+
+  function triggerAnalysisAnimation() {
+    const progressBar = document.getElementById('index-progress');
+    const statusText = document.getElementById('status-text');
+    const btnLabel = document.getElementById('btn-label');
+    const analyzeBtn = document.getElementById('analyze-btn');
+    const repoInput = document.getElementById('repo-input');
+    const currentRepo = repoInput ? repoInput.value : 'astral-sh/ruff';
+
+    if (!progressBar || !statusText || !analyzeBtn) return;
+
+    analyzeBtn.disabled = true;
+    btnLabel.textContent = "Analyzing AST...";
+    progressBar.style.width = "25%";
+    statusText.textContent = "Cloning symbolic graph and tree structure...";
+
+    setTimeout(() => {
+      progressBar.style.width = "65%";
+      statusText.textContent = "Tracing imports & detecting module couplings...";
+    }, 700);
+
+    setTimeout(() => {
+      progressBar.style.width = "100%";
+      statusText.textContent = "Synthesis complete! Navigating to Dependency Explorer...";
+    }, 1400);
+
+    setTimeout(() => {
+      analyzeBtn.disabled = false;
+      btnLabel.textContent = "Analyze Repository";
+      progressBar.style.width = "0%";
+      statusText.textContent = "Ready to index AST trees and call graphs";
+      // Smooth simulated routing to overview / dependency-explorer
+      const targetNav = document.querySelector('nav a[data-path="dependency-explorer"]') || document.querySelector('nav a[data-path="overview"]');
+      if (targetNav) {
+        targetNav.click();
+      }
+    }, 2200);
+  }
+</script></main><footer class="w-full bg-surface-container-lowest shadow-[0_-1px_6px_rgba(37,42,52,0.03)] py-space-lg"><div class="w-full px-gutter flex flex-col md:flex-row items-center justify-between gap-space-md text-on-surface-variant font-body-sm text-body-sm"><div><span>Astral Cartographer Architecture Studio • Structural Code Intelligence</span></div><div class="flex items-center gap-space-lg"><span class="font-code-sm text-code-sm">astral-sh/ruff@main (synced)</span><a class="hover:text-on-surface transition-colors" data-path="docs" href="#">Docs</a><a class="hover:text-on-surface transition-colors" data-path="settings" href="#">Preferences</a></div></div></footer></body></html>
