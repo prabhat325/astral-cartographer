@@ -1,147 +1,102 @@
 import path from "node:path";
-import {
-  detectCircularDependencies,
-  detectCluster,
-  computeBlastRadius,
-  computeArchitecturalHotspots,
-  computeOnboardingPathways,
-  computeRepositoryHealthScore
-} from "./graphIntelligence.js";
+import { DependencyAnalyzer } from "./DependencyAnalyzer.js";
 
-const EXTENSIONS = [
-  "", ".js", ".jsx", ".mjs", ".cjs",
-  ".ts", ".tsx", ".mts", ".cts"
-];
-
-export function resolveImport(sourceFile, importPath, fileSet) {
-  if (!importPath || !importPath.startsWith(".")) return null;
-
-  const base = path.posix.normalize(
-    path.posix.join(path.posix.dirname(sourceFile), importPath)
-  );
-
-  const candidates = [
-    ...EXTENSIONS.map((ext) => base + ext),
-    ...EXTENSIONS.slice(1).map(
-      (ext) => path.posix.join(base, `index${ext}`)
-    )
-  ];
-
-  return candidates.find((candidate) => fileSet.has(candidate)) ?? null;
-}
-
-export function buildGraph(files, importsByFile, functionCalls = [], fileMetrics = {}) {
-  const fileSet = new Set(files.map((file) => file.path));
-
-  // 1. Build initial raw file edges
-  const rawEdges = [];
-  const inDegreeMap = new Map();
-  const outDegreeMap = new Map();
-
-  for (const file of files) {
-    inDegreeMap.set(file.path, 0);
-    outDegreeMap.set(file.path, 0);
+/**
+ * GraphBuilder — Converts dependencies and structural component relationships
+ * into graph nodes and edges across files, classes, and functions.
+ */
+export class GraphBuilder {
+  constructor() {
+    this.dependencyAnalyzer = new DependencyAnalyzer();
   }
 
-  for (const file of files) {
-    const fileImports = importsByFile[file.path] ?? [];
-    for (const item of fileImports) {
-      const target = resolveImport(file.path, item.source, fileSet);
+  /**
+   * Build complete multi-scope architecture graph.
+   * @param {Array<{path: string, content: string}>} files
+   * @param {Record<string, Array<any>>} importsByFile
+   * @param {Array<any>} symbols
+   * @param {Array<any>} functionCalls
+   * @param {Record<string, any>} fileMetrics
+   */
+  build(files, importsByFile, symbols = [], functionCalls = [], fileMetrics = {}) {
+    // 1. File-level graph from DependencyAnalyzer
+    const fileAnalysis = this.dependencyAnalyzer.analyze(files, importsByFile, fileMetrics);
 
-      if (target) {
-        rawEdges.push({
-          source: file.path,
-          target,
-          type: item.kind || "import",
-          line: item.line ?? null,
-          isDynamic: Boolean(item.isDynamic)
-        });
+    // 2. Class & Struct level graph
+    const classNodes = [];
+    const classEdges = [];
+    const classSymbols = symbols.filter((s) => s.type === "class" || s.type === "interface" || s.type === "struct");
+    const classNamesSet = new Set(classSymbols.map((c) => c.name));
 
-        outDegreeMap.set(file.path, (outDegreeMap.get(file.path) || 0) + 1);
-        inDegreeMap.set(target, (inDegreeMap.get(target) || 0) + 1);
+    for (const cls of classSymbols) {
+      classNodes.push({
+        id: `class::${cls.file}::${cls.name}`,
+        name: cls.name,
+        type: "class",
+        file: cls.file,
+        line: cls.line,
+        superClass: cls.superClass || null,
+        cluster: "class",
+        complexity: cls.complexity || 1
+      });
+
+      if (cls.superClass && classNamesSet.has(cls.superClass)) {
+        const targetCls = classSymbols.find((c) => c.name === cls.superClass);
+        if (targetCls) {
+          classEdges.push({
+            id: `class_edge::${cls.name}__${cls.superClass}`,
+            source: `class::${cls.file}::${cls.name}`,
+            target: `class::${targetCls.file}::${targetCls.name}`,
+            type: "inherits"
+          });
+        }
       }
     }
-  }
 
-  // 2. Initial node objects
-  const rawNodes = files.map((file) => {
-    const metrics = fileMetrics[file.path] || {
-      loc: { total: 0, code: 0, comment: 0, blank: 0 },
-      tokenCount: 0,
-      complexity: 1,
-      functionComplexities: []
-    };
+    // 3. Function & Call graph
+    const functionNodes = [];
+    const funcSymbols = symbols.filter((s) => s.type === "function" || s.type === "method" || s.type === "arrow");
+    for (const fn of funcSymbols) {
+      functionNodes.push({
+        id: `fn::${fn.file}::${fn.name}`,
+        name: fn.name,
+        type: "function",
+        file: fn.file,
+        line: fn.line,
+        className: fn.className || null,
+        complexity: fn.complexity || 1,
+        paramsCount: fn.paramsCount || 0
+      });
+    }
+
+    const callEdges = functionCalls.map((call, idx) => {
+      // Find matching function node if any
+      const targetFn = funcSymbols.find((s) => s.name === call.callee);
+      const targetId = targetFn ? `fn::${targetFn.file}::${targetFn.name}` : `fn::external::${call.callee}`;
+      return {
+        id: `call_${idx}::${call.caller}->${call.callee}`,
+        source: `fn::${call.file}::${call.caller}`,
+        target: targetId,
+        type: "calls",
+        line: call.line,
+        calleeName: call.callee
+      };
+    });
 
     return {
-      id: file.path,
-      name: path.basename(file.path),
-      type: "file",
-      extension: path.extname(file.path).toLowerCase(),
-      cluster: detectCluster(file.path),
-      loc: metrics.loc,
-      tokenCount: metrics.tokenCount,
-      complexity: metrics.complexity,
-      inDegree: inDegreeMap.get(file.path) || 0,
-      outDegree: outDegreeMap.get(file.path) || 0
-    };
-  });
-
-  // 3. Circular Dependency Detection
-  const { cycles, cycleEdgesSet } = detectCircularDependencies(rawNodes, rawEdges);
-
-  // 4. Annotate edges with circular flag & unique ID
-  const edges = rawEdges.map((edge) => ({
-    ...edge,
-    isCircular: cycleEdgesSet.has(`${edge.source}:::${edge.target}`)
-  }));
-
-  // 5. Blast Radius Computation
-  const blastRadiusMap = computeBlastRadius(rawNodes, edges);
-  for (const node of rawNodes) {
-    node.blastRadius = blastRadiusMap.get(node.id) || {
-      affectedFiles: [],
-      affectedCount: 0,
-      ratio: 0
+      nodes: fileAnalysis.nodes,
+      edges: fileAnalysis.edges,
+      classNodes,
+      classEdges,
+      functionNodes,
+      functionEdges: callEdges,
+      callEdges,
+      circularCycles: fileAnalysis.circularCycles,
+      hotspots: fileAnalysis.hotspots,
+      onboarding: fileAnalysis.onboarding,
+      healthScore: fileAnalysis.healthScore,
+      avgComplexity: fileAnalysis.avgComplexity,
+      godFilesCount: fileAnalysis.godFilesCount
     };
   }
-
-  // 6. God File & Technical Debt Hotspot Scoring
-  const hotspots = computeArchitecturalHotspots(rawNodes);
-
-  // 7. Smart Onboarding Pathfinder
-  const onboarding = computeOnboardingPathways(rawNodes, cycles);
-
-  // 8. Repository Health Score
-  const godFilesCount = rawNodes.filter((n) => n.isGodFile).length;
-  const avgComplexity =
-    rawNodes.length > 0
-      ? Math.round(
-          rawNodes.reduce((acc, curr) => acc + (curr.complexity || 1), 0) / rawNodes.length
-        )
-      : 1;
-
-  const healthScore = computeRepositoryHealthScore({
-    totalFiles: rawNodes.length,
-    circularCyclesCount: cycles.length,
-    godFilesCount,
-    avgComplexity
-  });
-
-  // 9. Symbol / Call Graph Edges (with caller & callee)
-  const callEdges = functionCalls.map((call) => ({
-    source: `${call.file}::${call.caller}`,
-    target: call.callee,
-    type: "calls",
-    line: call.line
-  }));
-
-  return {
-    nodes: rawNodes,
-    edges,
-    callEdges,
-    circularCycles: cycles,
-    hotspots,
-    onboarding,
-    healthScore
-  };
 }

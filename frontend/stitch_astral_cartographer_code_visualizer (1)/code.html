@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {"darkMode":"class","theme":{"extend":{"colors":{"secondary-container":"#98a9ff","on-primary":"#ffffff","surface-variant":"#dee2f0","surface-container-high":"#e4e8f6","primary-container":"#5b6fc6","on-background":"#171c25","surface-container":"#e9eefb","error-container":"#ffdad6","surface":"#f9f9ff","on-secondary-container":"#283a8a","secondary":"#4758a9","error":"#ba1a1a","on-tertiary-fixed":"#271900","on-surface":"#171c25","surface-container-low":"#f0f3ff","surface-tint":"#4458ae","background":"#f9f9ff","on-primary-container":"#fffbff","secondary-fixed":"#dde1ff","inverse-primary":"#b8c3ff","surface-bright":"#f9f9ff","secondary-fixed-dim":"#b9c3ff","on-error-container":"#93000a","primary-fixed":"#dde1ff","outline-variant":"#c5c5d3","tertiary-fixed":"#ffdea8","surface-dim":"#d6dae7","on-tertiary-container":"#fffbff","primary-fixed-dim":"#b8c3ff","on-tertiary":"#ffffff","on-secondary":"#ffffff","inverse-on-surface":"#ecf0fe","on-primary-fixed":"#001355","tertiary-container":"#996d00","on-secondary-fixed-variant":"#2e408f","outline":"#757683","inverse-surface":"#2b303b","surface-container-lowest":"#ffffff","tertiary-fixed-dim":"#f6bd50","tertiary":"#795600","on-error":"#ffffff","on-tertiary-fixed-variant":"#5e4200","on-primary-fixed-variant":"#2a3f94","on-secondary-fixed":"#001257","surface-container-highest":"#dee2f0","primary":"#4156ab","on-surface-variant":"#454652"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-sm":"0.5rem","gutter":"1.5rem","space-md":"1rem","space-xl":"2.5rem","space-lg":"1.5rem","margin":"2rem","margin-mobile":"1rem","gutter-mobile":"0.75rem","space-xs":"0.25rem"},"fontFamily":{"body-sm":["Inter"],"display":["Inter"],"headline-lg-mobile":["Inter"],"code-md":["JetBrains Mono"],"label-sm":["Inter"],"body-md":["Inter"],"code-sm":["JetBrains Mono"],"body-lg":["Inter"],"label-md":["Inter"],"headline-sm":["Inter"],"headline-md":["Inter"],"headline-lg":["Inter"]},"fontSize":{"body-sm":["13px",{"lineHeight":"18px","letterSpacing":"0em","fontWeight":"400"}],"display":["36px",{"lineHeight":"44px","letterSpacing":"-0.025em","fontWeight":"600"}],"headline-lg-mobile":["22px",{"lineHeight":"30px","letterSpacing":"-0.015em","fontWeight":"600"}],"code-md":["13px",{"lineHeight":"20px","letterSpacing":"-0.005em","fontWeight":"400"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"600"}],"body-md":["14px",{"lineHeight":"22px","letterSpacing":"0em","fontWeight":"400"}],"code-sm":["11px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"500"}],"body-lg":["16px",{"lineHeight":"26px","letterSpacing":"-0.005em","fontWeight":"400"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"500"}],"headline-sm":["16px",{"lineHeight":"24px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-md":["20px",{"lineHeight":"28px","letterSpacing":"-0.015em","fontWeight":"600"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.02em","fontWeight":"600"}]}}}};</script></head><body class="bg-background font-body-md text-on-surface min-h-screen"><header class="fixed top-0 left-0 w-full z-50 bg-surface-container-lowest shadow-[0_1px_8px_rgba(37,42,52,0.04)]"><div class="h-16 w-full px-gutter flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg"><div class="flex items-center gap-space-sm"><img alt="Astral Cartographer Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VnZkr-_EWGmpw3cfYdaB0v_JtKu1d_mUG5HsWwSYOae8CG3J69g4K5OlirCDCoht3xo7wLI4YUeTkHWPFR_mA0NZYiEn1Pbvemmn35D10AzpOrSrBa_yfYInux3w0rQ56hi9KCLRk97oF-o0tErdhxJSKQoCa74hxEdLUrGX12tI03n8szy9MSFeHIfPl_837UZIklTilmYsdP9PN0_usGNeqK-tOnuU913OZeRUGo"/><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight">Astral Cartographer</span><span class="font-label-sm text-label-sm px-space-xs py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-medium">v1.2 Beta</span></div><div class="h-4 w-px bg-outline-variant hidden xl:block"></div><div class="hidden xl:flex items-center gap-space-sm px-space-sm py-1 rounded-full bg-surface-container text-on-surface font-code-sm text-code-sm"><span class="w-2 h-2 rounded-full bg-emerald-500"></span><span class="font-medium">astral-sh / ruff</span><span class="text-outline">:</span><span class="text-on-surface-variant">main</span></div></div><nav class="flex items-center gap-space-xs" data-active-classes="bg-surface-container-highest text-on-surface font-headline-sm"><a class="px-space-md py-space-sm rounded-lg font-body-sm text-body-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="home" href="#">New Analysis</a><a aria-current="page" class="px-space-md py-space-sm rounded-lg transition-colors bg-surface-container-highest text-on-surface font-headline-sm" data-path="overview" href="#">Overview</a><a class="px-space-md py-space-sm rounded-lg font-body-sm text-body-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="dependency-explorer" href="#">Dependency Explorer</a><a class="px-space-md py-space-sm rounded-lg font-body-sm text-body-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="code-explorer" href="#">Code Explorer</a><a class="flex items-center gap-space-xs px-space-md py-space-sm rounded-lg font-body-sm text-body-sm text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="architecture-health" href="#"><span>Architecture Health</span><span class="px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-800 font-label-sm text-label-sm">3 warnings</span></a></nav><div class="flex items-center gap-space-sm"><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface px-space-sm py-1 hidden sm:inline-flex" data-path="docs" href="#">Documentation</a><a aria-label="GitHub Repository" class="w-9 h-9 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" href="https://github.com" rel="noreferrer" target="_blank"><span class="material-symbols-outlined text-[20px]">code</span></a><a aria-label="Settings" class="w-9 h-9 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" data-path="settings" href="#"><span class="material-symbols-outlined text-[20px]">settings</span></a><img alt="Profile" class="w-8 h-8 rounded-full object-cover ml-space-xs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDN2IsJw7GhLEwHM62WJmpDpJh--9S19jCRXW0s7H1b-6R3L1VxS9M2YNZhyPSYQt5ZJXyxE_ZNqHmSrj-GfYijlaaGnNtcVClMBpgl-h_uVK1txk3q5oKLK3_4HsEi_kRqT9SE7eWaAP5HsnudNyDDat1Nx--cyWw-G8Evr0N0H18fridOQIskY5aoaxndc_mxWdOoldfPI6GgcD0OhqvVpDvOGcFz1bCPYTYmAhgw"/></div></div></header><main class="w-full pt-16 bg-background min-h-[calc(100vh-4rem)]"><div class="flex flex-col w-full">
+<!-- Repository Identity & Action Header Bar -->
+<section class="w-full bg-surface-container-lowest px-gutter py-space-lg shadow-sm">
+<div class="max-w-[1600px] mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-space-md">
+<!-- Repo Identifiers -->
+<div class="flex flex-col sm:flex-row sm:items-center gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-primary shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[28px]">account_tree</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex flex-wrap items-center gap-space-sm">
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">astral-sh / ruff</h1>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-code-sm text-code-sm">
+<span class="material-symbols-outlined text-[14px]">fork_right</span>
+              main (commit #8f2d1e)
+            </span>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+              Synchronized
+            </span>
+</div>
+<div class="flex items-center gap-space-md text-on-surface-variant font-body-sm text-body-sm">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-outline">schedule</span>
+              Last indexed 12 mins ago
+            </span>
+<span class="text-outline-variant">•</span>
+<span>Python AST & Rust Engine Topology</span>
+<span class="text-outline-variant">•</span>
+<span class="font-code-sm text-code-sm text-on-surface">v0.4.8-rc</span>
+</div>
+</div>
+</div>
+<!-- Quick Action Controls -->
+<div class="flex flex-wrap items-center gap-space-sm self-start lg:self-center">
+<button class="flex items-center gap-space-xs px-3.5 py-2 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container font-label-md text-label-md transition-all shadow-sm active:scale-95" id="rerun-btn">
+<span class="material-symbols-outlined text-[18px] text-primary">sync</span>
+<span>Re-run Analysis</span>
+</button>
+<div class="relative group">
+<button class="flex items-center gap-space-xs px-3.5 py-2 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container font-label-md text-label-md transition-all shadow-sm">
+<span class="material-symbols-outlined text-[18px] text-secondary">file_download</span>
+<span>Export Report</span>
+<span class="material-symbols-outlined text-[16px]">expand_more</span>
+</button>
+<div class="hidden group-hover:flex flex-col absolute right-0 top-full mt-1 w-44 bg-surface-container-lowest rounded-lg shadow-xl p-1 z-20">
+<a class="px-3 py-2 rounded-md hover:bg-surface-container font-body-sm text-body-sm text-on-surface flex items-center justify-between" href="#">
+<span>JSON Raw AST</span>
+<span class="font-code-sm text-code-sm text-on-surface-variant">.json</span>
+</a>
+<a class="px-3 py-2 rounded-md hover:bg-surface-container font-body-sm text-body-sm text-on-surface flex items-center justify-between" href="#">
+<span>Vector Diagram</span>
+<span class="font-code-sm text-code-sm text-on-surface-variant">.svg</span>
+</a>
+<a class="px-3 py-2 rounded-md hover:bg-surface-container font-body-sm text-body-sm text-on-surface flex items-center justify-between" href="#">
+<span>Executive Brief</span>
+<span class="font-code-sm text-code-sm text-on-surface-variant">.pdf</span>
+</a>
+</div>
+</div>
+<a class="flex items-center gap-space-xs px-3.5 py-2 rounded-lg bg-primary text-on-primary hover:bg-primary-container font-label-md text-label-md transition-all shadow-sm" href="https://github.com/astral-sh/ruff" rel="noreferrer" target="_blank">
+<span class="material-symbols-outlined text-[18px]">open_in_new</span>
+<span>View on GitHub</span>
+</a>
+</div>
+</div>
+</section>
+<!-- Metric Overview Canvas -->
+<section class="w-full max-w-[1600px] mx-auto px-gutter py-space-xl">
+<!-- Top KPI Cards Row -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-lg mb-space-xl">
+<!-- Card 1: Total Files -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+<div class="flex items-center justify-between mb-space-sm">
+<span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant">Total Files</span>
+<div class="w-10 h-10 rounded-lg bg-primary-fixed/30 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">description</span>
+</div>
+</div>
+<div class="flex items-baseline gap-space-sm mb-space-xs">
+<span class="font-display text-display text-on-surface font-semibold tracking-tight">184</span>
+<span class="font-body-sm text-body-sm text-emerald-700 flex items-center">
+<span class="material-symbols-outlined text-[16px]">arrow_upward</span>
+            +12 this sprint
+          </span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container overflow-hidden mt-space-xs">
+<div class="h-full bg-primary rounded-full" style="width: 78%;"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-2">12 modules active across 4 layers</span>
+</div>
+<!-- Card 2: Dependencies & Imports -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+<div class="flex items-center justify-between mb-space-sm">
+<span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant">Dependencies & Imports</span>
+<div class="w-10 h-10 rounded-lg bg-secondary-fixed/30 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[20px]">alt_route</span>
+</div>
+</div>
+<div class="flex items-baseline gap-space-sm mb-space-xs">
+<span class="font-display text-display text-on-surface font-semibold tracking-tight">1,429</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Direct & transitive</span>
+</div>
+<div class="flex items-center gap-1.5 mt-space-xs">
+<div class="flex-1 h-1.5 rounded-full bg-indigo-500"></div>
+<div class="flex-1 h-1.5 rounded-full bg-indigo-300"></div>
+<div class="flex-1 h-1.5 rounded-full bg-surface-container-high"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-2">912 internal • 517 external packages</span>
+</div>
+<!-- Card 3: Functions & Symbols -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+<div class="flex items-center justify-between mb-space-sm">
+<span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant">Functions & Symbols</span>
+<div class="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-700">
+<span class="material-symbols-outlined text-[20px]">memory</span>
+</div>
+</div>
+<div class="flex items-baseline gap-space-sm mb-space-xs">
+<span class="font-display text-display text-on-surface font-semibold tracking-tight">4,820</span>
+<span class="font-body-sm text-body-sm text-emerald-700 font-medium">94% documented</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container overflow-hidden mt-space-xs">
+<div class="h-full bg-emerald-600 rounded-full" style="width: 94%;"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-2">3,140 public exports • 1,680 private</span>
+</div>
+<!-- Card 4: Detected Cycles -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+<div class="flex items-center justify-between mb-space-sm">
+<span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant">Detected Cycles</span>
+<div class="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center text-amber-800">
+<span class="material-symbols-outlined text-[20px]">warning</span>
+</div>
+</div>
+<div class="flex items-baseline justify-between mb-space-xs">
+<span class="font-display text-display text-amber-800 font-semibold tracking-tight">3 Warnings</span>
+<a class="font-label-md text-label-md text-primary hover:underline flex items-center gap-0.5" data-path="architecture-health" href="#">
+            Inspect
+            <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</a>
+</div>
+<div class="flex items-center gap-2 mt-space-xs">
+<span class="px-2 py-0.5 rounded-full bg-red-100 text-red-800 font-label-sm text-label-sm font-semibold">2 High</span>
+<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-label-sm text-label-sm font-semibold">1 Medium</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-2">Cycle loop: ruff_linter ↔ ruff_workspace</span>
+</div>
+</div>
+<!-- Main 70/30 Asymmetric Analytics Workspace -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-lg items-start">
+<!-- 70% Left: Dependency Graph Preview Card -->
+<div class="xl:col-span-8 flex flex-col bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<!-- Workbench Toolbar -->
+<div class="px-space-lg py-space-md bg-surface-container-low flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex flex-wrap items-center gap-space-sm flex-1 min-w-[280px]">
+<div class="relative flex-1 max-w-xs">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-outline text-[18px]">search</span>
+<input class="w-full pl-9 pr-3 py-1.5 bg-surface-container-lowest text-on-surface placeholder:text-outline rounded-lg text-body-sm font-body-sm focus:outline-none focus:ring-2 focus:ring-primary/20 shadow-xs" id="graph-search" placeholder="Highlight module (e.g. MODELS, DB)..." type="text"/>
+</div>
+<div class="flex items-center gap-1.5 bg-surface-container-lowest px-2 py-1 rounded-lg shadow-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant pl-1">Layout</span>
+<select class="bg-transparent font-code-sm text-code-sm text-on-surface focus:outline-none cursor-pointer" id="layout-select">
+<option value="layered">Layered (Sugiyama)</option>
+<option value="force">Force Directed</option>
+<option value="radial">Radial Hub</option>
+</select>
+</div>
+<div class="flex items-center gap-1.5 bg-surface-container-lowest px-2 py-1 rounded-lg shadow-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant pl-1">Density</span>
+<select class="bg-transparent font-code-sm text-code-sm text-on-surface focus:outline-none cursor-pointer">
+<option>Core (Essential paths)</option>
+<option>All Modules</option>
+<option>Isolates & Hubs</option>
+</select>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="font-code-sm text-code-sm text-on-surface-variant mr-1">11 nodes • 14 edges</span>
+<a class="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-on-primary font-label-md text-label-md hover:bg-primary-container transition-all shadow-sm" data-path="dependency-explorer" href="#">
+<span>Open Full Explorer</span>
+<span class="material-symbols-outlined text-[16px]">fullscreen</span>
+</a>
+</div>
+</div>
+<!-- Graph Visualization Area -->
+<div class="relative w-full h-[580px] bg-surface-container-lowest overflow-hidden select-none" id="graph-container">
+<!-- Subtle Blueprint Dot Grid -->
+<div class="absolute inset-0 opacity-40 pointer-events-none" style="background-image: radial-gradient(#757683 0.75px, transparent 0.75px); background-size: 20px 20px;"></div>
+<!-- Dynamic SVG Connection Edges -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<marker id="arrow-green" markerheight="6" markerwidth="6" orient="auto-start-reverse" refx="7" refy="5" viewbox="0 0 10 10">
+<path d="M 0 1 L 8 5 L 0 9 z" fill="#10B981"></path>
+</marker>
+<marker id="arrow-indigo" markerheight="6" markerwidth="6" orient="auto-start-reverse" refx="7" refy="5" viewbox="0 0 10 10">
+<path d="M 0 1 L 8 5 L 0 9 z" fill="#4156ab"></path>
+</marker>
+<marker id="arrow-neutral" markerheight="6" markerwidth="6" orient="auto-start-reverse" refx="7" refy="5" viewbox="0 0 10 10">
+<path d="M 0 1 L 8 5 L 0 9 z" fill="#98a9ff"></path>
+</marker>
+</defs>
+<!-- HANDLER to DB -->
+<path d="M 180 280 C 230 280, 240 160, 280 160" fill="none" marker-end="url(#arrow-indigo)" stroke="#4156ab" stroke-dasharray="4 2" stroke-width="2"></path>
+<!-- HANDLER to FEATURE_FLAGS -->
+<path d="M 180 290 C 220 290, 240 240, 270 240" fill="none" marker-end="url(#arrow-neutral)" stroke="#98a9ff" stroke-width="1.5"></path>
+<!-- HANDLER to METRICS -->
+<path d="M 180 300 C 230 300, 250 330, 290 330" fill="none" marker-end="url(#arrow-neutral)" stroke="#98a9ff" stroke-width="1.5"></path>
+<!-- HANDLER to STATE -->
+<path d="M 180 320 C 230 350, 280 430, 360 430" fill="none" marker-end="url(#arrow-indigo)" stroke="#4156ab" stroke-width="2.5"></path>
+<!-- DB to MODELS (Heavy coupling) -->
+<path d="M 430 160 C 510 160, 520 230, 570 230" fill="none" marker-end="url(#arrow-green)" stroke="#10b981" stroke-dasharray="6 3" stroke-width="3"></path>
+<!-- FEATURE_FLAGS to MODELS -->
+<path d="M 420 240 C 470 240, 510 240, 570 240" fill="none" marker-end="url(#arrow-neutral)" stroke="#98a9ff" stroke-width="1.5"></path>
+<!-- STATE to MODELS -->
+<path d="M 500 430 C 530 430, 545 320, 570 270" fill="none" marker-end="url(#arrow-indigo)" stroke="#4156ab" stroke-width="2"></path>
+<!-- STATE to TOOL_PROVIDERS -->
+<path d="M 500 440 C 520 440, 530 390, 550 380" fill="none" marker-end="url(#arrow-indigo)" stroke="#4156ab" stroke-width="2"></path>
+<!-- STATE to AI_PROVIDERS -->
+<path d="M 500 450 C 520 470, 530 490, 540 490" fill="none" marker-end="url(#arrow-neutral)" stroke="#98a9ff" stroke-width="1.5"></path>
+<!-- DB to SHORT_ID -->
+<path d="M 430 140 C 480 130, 500 110, 550 110" fill="none" marker-end="url(#arrow-green)" stroke="#10b981" stroke-width="2"></path>
+</svg>
+<!-- Graph Nodes Layer -->
+<!-- Node 1: HANDLER (Root Source) -->
+<div class="graph-node absolute left-8 top-[250px] w-44 bg-surface-container-lowest rounded-xl shadow-md border-2 border-transparent hover:border-primary transition-all cursor-pointer group" data-node="handler">
+<div class="px-3 py-1.5 rounded-t-xl bg-purple-600 text-white flex items-center justify-between">
+<span class="font-code-md text-code-md font-semibold tracking-wide">HANDLER</span>
+<span class="material-symbols-outlined text-[14px]">north_east</span>
+</div>
+<div class="p-2.5 font-body-sm text-body-sm flex flex-col gap-1 text-on-surface">
+<div class="flex justify-between text-on-surface-variant font-code-sm text-code-sm">
+<span>1 file</span>
+<span>8 fns</span>
+<span class="text-purple-700 font-semibold">3 async</span>
+</div>
+<div class="pt-1 flex items-center justify-between text-[11px] text-outline group-hover:text-primary transition-colors">
+<span>View exports</span>
+<span class="material-symbols-outlined text-[13px]">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Node 2: DB (Orange Hub) -->
+<div class="graph-node absolute left-[280px] top-[110px] w-48 bg-surface-container-lowest rounded-xl shadow-md border-2 border-transparent hover:border-primary transition-all cursor-pointer group" data-node="db">
+<div class="px-3 py-1.5 rounded-t-xl bg-amber-500 text-white flex items-center justify-between">
+<div class="flex items-center gap-1">
+<span class="font-code-md text-code-md font-semibold tracking-wide">DB</span>
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+</div>
+<span class="material-symbols-outlined text-[14px]">north_east</span>
+</div>
+<div class="p-2.5 font-body-sm text-body-sm flex flex-col gap-1 text-on-surface">
+<div class="flex justify-between text-on-surface-variant font-code-sm text-code-sm">
+<span>4 files</span>
+<span>177 fns</span>
+<span>17 pub</span>
+</div>
+<div class="flex items-center justify-between text-[11px] pt-1">
+<span class="text-amber-800 font-medium">Critical hub</span>
+<span class="font-code-sm text-code-sm text-outline">166 async</span>
+</div>
+</div>
+</div>
+<!-- Node 3: FEATURE_FLAGS -->
+<div class="graph-node absolute left-[270px] top-[215px] w-44 bg-surface-container-lowest rounded-xl shadow-md border-2 border-transparent hover:border-primary transition-all cursor-pointer group" data-node="feature_flags">
+<div class="px-3 py-1.5 rounded-t-xl bg-pink-600 text-white flex items-center justify-between">
+<span class="font-code-md text-code-md font-semibold tracking-wide">FEATURE_FLAGS</span>
+<span class="material-symbols-outlined text-[14px]">north_east</span>
+</div>
+<div class="p-2.5 font-body-sm text-body-sm flex flex-col gap-0.5 text-on-surface">
+<div class="flex justify-between text-on-surface-variant font-code-sm text-code-sm">
+<span>1 file</span>
+<span>11 fns</span>
+<span>10 pub</span>
+</div>
+<span class="text-[11px] text-outline pt-0.5">Toggle matrix resolver</span>
+</div>
+</div>
+<!-- Node 4: METRICS -->
+<div class="graph-node absolute left-[290px] top-[305px] w-40 bg-surface-container-lowest rounded-xl shadow-md border-2 border-transparent hover:border-primary transition-all cursor-pointer group" data-node="metrics">
+<div class="px-3 py-1.5 rounded-t-xl bg-slate-700 text-white flex items-center justify-between">
+<span class="font-code-md text-code-md font-semibold tracking-wide">METRICS</span>
+<span class="material-symbols-outlined text-[14px]">north_east</span>
+</div>
+<div class="p-2.5 font-body-sm text-body-sm flex flex-col gap-0.5 text-on-surface">
+<div class="flex justify-between text-on-surface-variant font-code-sm text-code-sm">
+<span>1 file</span>
+<span>2 fns</span>
+<span>1 async</span>
+</div>
+</div>
+</div>
+<!-- Node 5: STATE (Red Core Node) -->
+<div class="graph-node absolute left-[360px] top-[405px] w-40 bg-surface-container-lowest rounded-xl shadow-md border-2 border-transparent hover:border-primary transition-all cursor-pointer group" data-node="state">
+<div class="px-3 py-1.5 rounded-t-xl bg-rose-600 text-white flex items-center justify-between">
+<span class="font-code-md text-code-md font-semibold tracking-wide">STATE</span>
+<span class="material-symbols-outlined text-[14px]">north_east</span>
+</div>
+<div class="p-2.5 font-body-sm text-body-sm flex flex-col gap-0.5 text-on-surface">
+<div class="flex justify-between text-on-surface-variant font-code-sm text-code-sm">
+<span>1 file</span>
+<span>1 fns</span>
+<span>1 pub</span>
+</div>
+<span class="text-[11px] text-rose-700 font-medium">Shared mutation sink</span>
+</div>
+</div>
+<!-- Node 6: MODELS (Indigo Centerpiece) -->
+<div class="graph-node absolute left-[570px] top-[210px] w-48 bg-surface-container-lowest rounded-xl shadow-lg ring-2 ring-primary/20 border-2 border-primary transition-all cursor-pointer group" data-node="models">
+<div class="px-3 py-1.5 rounded-t-xl bg-primary text-white flex items-center justify-between">
+<span class="font-code-md text-code-md font-semibold tracking-wide">MODELS</span>
+<span class="material-symbols-outlined text-[14px]">stars</span>
+</div>
+<div class="p-3 font-body-sm text-body-sm flex flex-col gap-1 text-on-surface">
+<div class="flex justify-between text-on-surface-variant font-code-sm text-code-sm">
+<span>1 file</span>
+<span>10 fns</span>
+<span class="text-primary font-bold">8 pub</span>
+</div>
+<div class="flex items-center gap-1.5 pt-1">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span class="font-label-sm text-label-sm text-on-surface">Primary schema target</span>
+</div>
+</div>
+</div>
+<!-- Node 7: SHORT_ID (Lime utility) -->
+<div class="graph-node absolute left-[550px] top-[80px] w-38 bg-surface-container-lowest rounded-xl shadow-md border-2 border-transparent hover:border-primary transition-all cursor-pointer group" data-node="short_id">
+<div class="px-3 py-1.5 rounded-t-xl bg-lime-600 text-white flex items-center justify-between">
+<span class="font-code-md text-code-md font-semibold tracking-wide">SHORT_ID</span>
+<span class="material-symbols-outlined text-[14px]">north_east</span>
+</div>
+<div class="p-2 font-body-sm text-body-sm flex flex-col text-on-surface font-code-sm text-code-sm">
+<span>1 file • 5 fns • 5 pub</span>
+</div>
+</div>
+<!-- Node 8: TOOL_PROVIDERS (Teal sink) -->
+<div class="graph-node absolute left-[550px] top-[345px] w-44 bg-surface-container-lowest rounded-xl shadow-md border-2 border-transparent hover:border-primary transition-all cursor-pointer group" data-node="tool_providers">
+<div class="px-3 py-1.5 rounded-t-xl bg-teal-600 text-white flex items-center justify-between">
+<span class="font-code-md text-code-md font-semibold tracking-wide">TOOL_PROVIDERS</span>
+<span class="material-symbols-outlined text-[14px]">north_east</span>
+</div>
+<div class="p-2.5 font-body-sm text-body-sm flex flex-col text-on-surface">
+<span class="font-code-sm text-code-sm text-on-surface-variant">2 files • 4 fns • 0 pub</span>
+</div>
+</div>
+<!-- Node 9: AI_PROVIDERS (Sky external) -->
+<div class="graph-node absolute left-[540px] top-[460px] w-44 bg-surface-container-lowest rounded-xl shadow-md border-2 border-transparent hover:border-primary transition-all cursor-pointer group" data-node="ai_providers">
+<div class="px-3 py-1.5 rounded-t-xl bg-sky-600 text-white flex items-center justify-between">
+<span class="font-code-md text-code-md font-semibold tracking-wide">AI_PROVIDERS</span>
+<span class="material-symbols-outlined text-[14px]">north_east</span>
+</div>
+<div class="p-2.5 font-body-sm text-body-sm flex flex-col text-on-surface">
+<span class="font-code-sm text-code-sm text-on-surface-variant">4 files • 14 fns • 0 pub</span>
+</div>
+</div>
+<!-- Canvas Graph Guide Overlay (Top-Right) -->
+<div class="absolute right-4 top-4 bg-surface-container-lowest/95 backdrop-blur-md p-space-sm rounded-xl shadow-md flex flex-col gap-2 max-w-[210px] pointer-events-auto">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Coupling Weight</span>
+<div class="flex items-center gap-2 text-on-surface font-body-sm text-body-sm">
+<div class="w-6 h-1 rounded bg-emerald-500"></div>
+<span>Heavy (>20 imports)</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface font-body-sm text-body-sm">
+<div class="w-6 h-0.5 rounded bg-primary"></div>
+<span>Medium (5-20)</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface font-body-sm text-body-sm">
+<div class="w-6 h-px rounded bg-secondary-container"></div>
+<span>Light (1-4)</span>
+</div>
+</div>
+<!-- Interactive Canvas Controls (Bottom-Left) -->
+<div class="absolute left-4 bottom-4 flex flex-col gap-1 bg-surface-container-lowest rounded-xl shadow-md p-1">
+<button class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-surface-container text-on-surface active:bg-surface-container-high transition-colors" title="Zoom in">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-surface-container text-on-surface active:bg-surface-container-high transition-colors" title="Zoom out">
+<span class="material-symbols-outlined text-[20px]">remove</span>
+</button>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-surface-container text-on-surface active:bg-surface-container-high transition-colors" title="Fit to viewport">
+<span class="material-symbols-outlined text-[20px]">fit_screen</span>
+</button>
+</div>
+<!-- Canvas Mini-Map Container (Bottom-Right) -->
+<div class="absolute right-4 bottom-4 w-44 h-28 bg-surface-container-low/95 rounded-xl shadow-md p-1.5 flex flex-col justify-between overflow-hidden">
+<div class="flex items-center justify-between px-1">
+<span class="font-label-sm text-label-sm text-outline font-semibold">MINI-MAP</span>
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+</div>
+<!-- Mock schematic layout -->
+<div class="relative w-full h-20 bg-surface-container rounded flex items-center justify-center">
+<div class="absolute left-2 top-8 w-4 h-2.5 bg-purple-500 rounded-xs"></div>
+<div class="absolute left-10 top-2 w-6 h-2.5 bg-amber-500 rounded-xs"></div>
+<div class="absolute left-10 top-6 w-5 h-2.5 bg-pink-500 rounded-xs"></div>
+<div class="absolute left-12 top-12 w-4 h-2 bg-rose-500 rounded-xs"></div>
+<div class="absolute right-6 top-6 w-6 h-3 bg-primary rounded-xs"></div>
+<div class="absolute right-6 top-12 w-5 h-2 bg-teal-500 rounded-xs"></div>
+<!-- Viewport focus lens -->
+<div class="absolute inset-x-3 inset-y-1 bg-primary/10 rounded shadow-xs"></div>
+</div>
+</div>
+</div>
+<!-- Canvas Footer Status Bar -->
+<div class="px-space-lg py-2.5 bg-surface-container-lowest flex items-center justify-between text-on-surface-variant font-code-sm text-code-sm">
+<div class="flex items-center gap-space-md">
+<span>Projection: DAG Orthogonal</span>
+<span class="text-outline-variant">•</span>
+<span>Selected: <span class="text-on-surface font-semibold" id="active-selection-label">MODELS (10 fns)</span></span>
+</div>
+<span class="text-[12px] text-outline">Click any module or dependency edge to inspect properties</span>
+</div>
+</div>
+<!-- 30% Right Column: High-Value Analytical Cards -->
+<div class="xl:col-span-4 flex flex-col gap-space-lg">
+<!-- Card A: Top Couplings & Critical Modules -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col">
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">hub</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Top Couplings</h2>
+</div>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant">Top 4</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md">Modules with highest cross-boundary dependency density and cycle vulnerability.</p>
+<div class="flex flex-col gap-space-sm">
+<!-- Item 1 -->
+<div class="p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center font-code-sm text-code-sm font-semibold">
+                  db
+                </div>
+<span class="font-body-sm text-body-sm text-outline">→</span>
+<span class="font-code-md text-code-md text-on-surface font-semibold group-hover:text-primary transition-colors">models</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-code-sm text-code-sm px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">47 imports</span>
+<span class="material-symbols-outlined text-[16px] text-outline group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-purple-100 text-purple-800 flex items-center justify-center font-code-sm text-code-sm font-semibold">
+                  hnd
+                </div>
+<span class="font-body-sm text-body-sm text-outline">→</span>
+<span class="font-code-md text-code-md text-on-surface font-semibold group-hover:text-primary transition-colors">state</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-code-sm text-code-sm px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-semibold">11 imports</span>
+<span class="material-symbols-outlined text-[16px] text-outline group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-purple-100 text-purple-800 flex items-center justify-center font-code-sm text-code-sm font-semibold">
+                  hnd
+                </div>
+<span class="font-body-sm text-body-sm text-outline">→</span>
+<span class="font-code-md text-code-md text-on-surface font-semibold group-hover:text-primary transition-colors">db</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-code-sm text-code-sm px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-semibold">6 imports</span>
+<span class="material-symbols-outlined text-[16px] text-outline group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="p-space-sm rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-rose-100 text-rose-800 flex items-center justify-center font-code-sm text-code-sm font-semibold">
+                  ste
+                </div>
+<span class="font-body-sm text-body-sm text-outline">→</span>
+<span class="font-code-md text-code-md text-on-surface font-semibold group-hover:text-primary transition-colors">tool_providers</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-code-sm text-code-sm px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-semibold">4 imports</span>
+<span class="material-symbols-outlined text-[16px] text-outline group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm flex justify-between items-center text-on-surface-variant font-body-sm text-body-sm">
+<span>Critical path latency: <strong>1.4ms</strong></span>
+<a class="text-primary hover:underline font-label-md text-label-md" data-path="dependency-explorer" href="#">View matrix →</a>
+</div>
+</div>
+<!-- Card B: Architecture Quick Stats -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col">
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[22px]">analytics</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Architecture Quick Stats</h2>
+</div>
+<span class="material-symbols-outlined text-outline text-[18px]">verified</span>
+</div>
+<div class="grid grid-cols-2 gap-space-md">
+<!-- Stat 1 -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Graph Density</span>
+<div class="my-2">
+<span class="font-headline-lg text-headline-lg text-on-surface font-bold">0.14</span>
+</div>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-emerald-700 font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                Clean / Loose
+              </span>
+</div>
+<!-- Stat 2 -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Modularity Index</span>
+<div class="my-2">
+<span class="font-headline-lg text-headline-lg text-on-surface font-bold">0.82</span>
+<span class="font-body-sm text-body-sm text-outline">/ 1.0</span>
+</div>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-primary font-semibold">
+                High Cohesion
+              </span>
+</div>
+<!-- Stat 3 -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Max Depth</span>
+<div class="my-2">
+<span class="font-headline-lg text-headline-lg text-on-surface font-bold">6</span>
+<span class="font-body-sm text-body-sm text-outline">layers</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Optimal limit ≤ 8</span>
+</div>
+<!-- Stat 4 -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Orphan Files</span>
+<div class="my-2">
+<span class="font-headline-lg text-headline-lg text-amber-800 font-bold">4</span>
+<span class="font-body-sm text-body-sm text-outline">files</span>
+</div>
+<a class="font-label-sm text-label-sm text-primary hover:underline font-semibold" href="#">Isolate review →</a>
+</div>
+</div>
+<!-- Bottom Structural Health Callout -->
+<div class="mt-space-md p-space-sm rounded-lg bg-surface-container flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-[20px] text-primary shrink-0 mt-0.5">info</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              Topology indicates strong separation between parser AST and runtime lint rules. No cyclic dependencies detected in root orchestrator.
+            </p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Interactive Logic Hook -->
+<script>
+    (function initOverviewInteractions() {
+      const searchInput = document.getElementById('graph-search');
+      const nodes = document.querySelectorAll('.graph-node');
+      const activeLabel = document.getElementById('active-selection-label');
+      const rerunBtn = document.getElementById('rerun-btn');
+
+      // Filter Nodes on Search
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          const query = e.target.value.trim().toLowerCase();
+          nodes.forEach(node => {
+            const nodeKey = node.getAttribute('data-node') || '';
+            const nodeText = node.innerText.toLowerCase();
+            if (!query || nodeKey.includes(query) || nodeText.includes(query)) {
+              node.style.opacity = '1';
+              node.style.filter = 'none';
+            } else {
+              node.style.opacity = '0.25';
+              node.style.filter = 'grayscale(80%)';
+            }
+          });
+        });
+      }
+
+      // Highlight clicked node & update status bar
+      nodes.forEach(node => {
+        node.addEventListener('click', () => {
+          nodes.forEach(n => n.classList.remove('ring-4', 'ring-primary/40'));
+          node.classList.add('ring-4', 'ring-primary/40');
+          const title = node.querySelector('.font-code-md')?.textContent || 'Module';
+          if (activeLabel) {
+            activeLabel.textContent = title + ' (focused)';
+          }
+        });
+      });
+
+      // Quick visual feedback on re-run
+      if (rerunBtn) {
+        rerunBtn.addEventListener('click', () => {
+          const icon = rerunBtn.querySelector('.material-symbols-outlined');
+          if (icon) {
+            icon.classList.add('animate-spin');
+            setTimeout(() => {
+              icon.classList.remove('animate-spin');
+            }, 1000);
+          }
+        });
+      }
+    })();
+  </script>
+</div></main><footer class="w-full bg-surface-container-lowest shadow-[0_-1px_6px_rgba(37,42,52,0.03)] py-space-lg"><div class="w-full px-gutter flex flex-col md:flex-row items-center justify-between gap-space-md text-on-surface-variant font-body-sm text-body-sm"><div><span>Astral Cartographer Architecture Studio • Structural Code Intelligence</span></div><div class="flex items-center gap-space-lg"><span class="font-code-sm text-code-sm">astral-sh/ruff@main (synced)</span><a class="hover:text-on-surface transition-colors" data-path="docs" href="#">Docs</a><a class="hover:text-on-surface transition-colors" data-path="settings" href="#">Preferences</a></div></div></footer></body></html>

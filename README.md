@@ -1,112 +1,152 @@
-# Astral Cartographer — Architecture & AST Intelligence Engine
-
-> **Problem Statement (PS6):** Unpack massive repository complexity by parsing git repositories, analyzing Abstract Syntax Trees (ASTs), computing architectural health metrics, and rendering interactive topological dependency atlases.
+# The Astral Cartographer — Architectural & Dependency Intelligence
 
 ---
 
-## 🏛️ System Architecture & Role Division
+## 🌌 Description of the Problem
+
+**The Astral Cartographer** is a web-based tool that automatically analyzes a GitHub repository and converts its source code structure into an interactive architectural/dependency graph. It helps developers understand complex codebases by visualizing files, classes, functions, imports, and their relationships in one place.
+
+---
+
+## 🔄 Process Flow of the Website
 
 ```
-             USER
-               │
-               ▼
-        ┌──────────────┐
-        │   FRONTEND   │  Person 1: 2D/3D Interactive Dependency Atlas,
-        │  (Person 1)  │            Code Exploration Panel, Filter & Search
-        └──────┬───────┘
-               │  REST / WebSocket
-               ▼
-        ┌──────────────┐
-        │   BACKEND    │  Person 2: GitHub repo ingestion, clone/unzip,
-        │  (Person 2)  │            caching, rate-limiting & orchestrator
-        └──────┬───────┘
-               │  In-Memory / HTTP POST /analyze
-               ▼
-        ┌──────────────┐
-        │   ANALYZER   │  🔥 Person 3 (This Engine):
-        │  (Person 3)  │  AST parsing, Cyclomatic Complexity, Cycle Detection,
-        └──────────────┘  God File Scoring, Blast Radius & Onboarding Pathways
+User enters GitHub URL ➔ Backend fetches/clones repository ➔ Code is parsed using AST parsing ➔ 
+System extracts files, functions, classes, imports & dependencies ➔ Dependency/Architecture graph generated ➔ 
+Cystoscope.js renders interactive frontend graph ➔ User explores nodes, relationships & code previews ➔ 
+Search/filter finds specific files, functions or classes ➔ AI explains code & flags architectural issues
 ```
 
 ---
 
-## 🚀 Engine Capabilities (Ascended Mastery Tier)
+## 🏛️ Core Engineering Architecture & Class Diagram
 
-### 1. Deep AST Parsing & Symbol Resolution
-- **Parser:** `@babel/parser` with tolerant error recovery (`errorRecovery: true`), supporting JavaScript, JSX, TypeScript, TSX, dynamic imports (`import(...)`), CommonJS (`require(...)`), and ES6 module re-exports.
-- **Symbol Extraction:** Functions (declarations & exported arrow expressions), classes, methods, TypeScript interfaces & type aliases, with line numbers, export indicators, and parameter signatures.
-- **Call Graph Mapping:** Maps call expressions inside scopes to target callees (`caller -> callee`).
+```
+User ➔ React Frontend ➔ Node.js Backend ➔ GitHub REST API ➔ CodeParser (Tree-sitter & Babel) ➔ 
+ASTAnalyzer ➔ DependencyAnalyzer ➔ GraphBuilder ➔ AnalysisResult ➔ VisualizationService ➔ Cystoscope.js
+```
 
-### 2. Code Exploration & Complexity Metrics
-- **Cyclomatic Complexity $V(G)$:** Traverses AST branching decision points (`IfStatement`, `ConditionalExpression`, `Loops`, `CatchClause`, `SwitchCase`, logical operators `&&`, `||`, `??`).
-- **Token Counts & LOC:** Computes total lines of code, code lines, comment lines, blank lines, and lexical token density.
-
-### 3. Graph Intelligence Algorithms
-- **Circular Dependency Detection:** Directed DFS graph traversal with recursion back-edge tracking to pinpoint cyclic import loops (e.g. `serviceA -> serviceB -> serviceA`). Cyclic edges are automatically flagged with `isCircular: true`.
-- **Architectural Clustering:** Classifies modules into architectural layers (`ui`, `api`, `state`, `utils`, `config`, `core`).
-- **Transitive Blast Radius:** Reverse dependency graph traversal computing the downstream impact ratio if a file is modified:
-  $$\text{Blast Radius Ratio} = \frac{\text{Affected Downstream Files}}{\text{Total Files} - 1}$$
-- **Architectural Health & "God File" Hotspots:**
-  Composite risk scoring based on Fan-In (dependents), Fan-Out, Cyclomatic Complexity, and LOC. Identifies fragile high-risk modules and technical debt hotspots.
-- **Smart Onboarding Pathfinder:**
-  Automatically identifies **Good First Issues** (isolated modules with low complexity and zero/low blast radius) suitable for beginner pull requests.
+### Main Classes (PDF Class Diagram Specification)
+1. **`RepositoryController`**: Handles user HTTP requests (`/api/analyze`, `/api/ai/explain`, `/cache`), validates repositories, manages caching, and coordinates services.
+2. **`GitHubService`**: Communicates with GitHub REST API: retrieves repository metadata, tree structure, source files, branches, commits, and language stats with throttling and rate-limit handling.
+3. **`CodeParser`**: Multi-language AST code parser supporting Tree-sitter & robust grammars across JavaScript, TypeScript, Python, Java, Go, C/C++, Rust, and PHP.
+4. **`ASTAnalyzer`**: Extracts functions, classes, methods, imports, and dependencies, and calculates Cyclomatic Complexity $V(G)$ and Lines of Code (LOC).
+5. **`DependencyAnalyzer`**: Identifies relationships between components, afferent/efferent coupling ($C_a, C_e$), circular cycles, blast radius, God file hotpots, and architectural health.
+6. **`GraphBuilder`**: Converts dependencies into multi-scope graph models: File Graph, Class Hierarchy Graph, and Function Call Graph.
+7. **`AnalysisResult`**: Stores and encapsulates processed architecture information, metrics, symbols, and summary reports.
+8. **`VisualizationService`**: Prepares, filters, and formats graph elements for Cystoscope.js rendering with level-of-detail (LOD) aggregation and path tracing.
 
 ---
 
-## 🔌 API & Integration Guide (For Person 2 Backend)
+## 🚀 Key Implemented Features
 
-### Method A: Microservice Mode (HTTP API)
-Start the Analyzer server on port 5050:
+### 1. GitHub Repository URL Ingestion
+- Ingest any public GitHub repository via URL or `owner/repo` slug.
+- Fetches metadata, branches, commits, tree structure, and source files directly via GitHub REST API.
+
+### 2. Interactive Dependency / Architecture Graph (Cystoscope.js)
+- Multi-mode graph visualization:
+  - **📁 Files View**: Module-level dependency graph with circular loops and God files highlighted.
+  - **🏛️ Classes View**: Class and struct hierarchy with inheritance and extension links.
+  - **⚡ Functions View**: Function call graph with caller $\rightarrow$ callee edges.
+- Multiple layout algorithms: CoSE Force-Directed, Breadth-First, Concentric, Circle, and Grid.
+- Node size scales proportionally to afferent coupling / centrality.
+
+### 3. Dependency Tracing
+- **Downstream Tracing**: Trace all outgoing transitive dependencies of a component.
+- **Upstream Tracing**: Trace all incoming dependents that rely on a component.
+- **Shortest Path Tracing**: Pick any Source and Target node to spotlight the exact dependency chain.
+- **Blast Radius Tracing**: Highlight all downstream affected files if a module is modified.
+- **Circular Cycle Spotlight**: Interactive dropdown to center and spotlight circular dependency loops.
+
+### 4. File, Class & Function Exploration & Code Preview
+- Deep exploration of files, classes, methods, and functions with line numbers, signatures, and complexity.
+- Inline **Code Preview** directly inside the Dependency Explorer Inspector panel.
+- Dedicated **Code Explorer** page with search, sorting by LOC/CC/coupling, and symbol navigation.
+
+### 5. Multi-dimensional Search & Filtering
+- Search nodes by name across files, classes, or functions.
+- Filter by Architectural Layer / Cluster (`core`, `ui`, `api`, `state`, `utils`, `config`).
+- Filter by Language / Extension (`.js`, `.jsx`, `.ts`, `.tsx`, `.py`, `.go`, `.java`, `.cpp`, `.rs`, `.php`).
+- Filter by Risk: God Files, Circular Loops, High Cyclomatic Complexity ($CC > 8$).
+
+### 6. Repository Statistics
+- GitHub Metadata: Stars, Forks, Watchers, Open Issues, Default Branch, License, and Repo Size.
+- **Recent Commits Log**: Timeline of commits with author, date, and commit SHA.
+- **Branches List**: Branch names with protected status badges.
+- **Language Breakdown**: Visual multi-color distribution bar and detailed percentage breakdown.
+- Code Metrics: Total Files, Total Code LOC, Classes, Functions, Imports, Call Expressions, and Average CC.
+
+### 7. Code Complexity & Architecture Health Score
+- Cyclomatic Complexity $V(G) = 1 + \text{decision points}$ across all supported languages.
+- Composite **Health Score (0–100)** with grade and risk breakdown gauges (Circular Risk, Coupling Risk, Complexity Risk).
+- **God File Hotpots**: Composite scoring based on $1.5 \times C_a + 0.8 \times C_e + 0.4 \times CC + 0.3 \times \frac{LOC}{25}$.
+
+### 8. AI-Powered Code Explanation & Architectural Issue Detection
+- Seamless dual-engine design:
+  - Powered by **Google Gemini 1.5 Flash** when `GEMINI_API_KEY` is configured.
+  - Built-in **Architectural AI Expert** heuristics engine fallback when offline or without external API keys.
+- Analyzes Purpose, Key Responsibilities, Architectural Observations (God files, circular loops, high coupling), and Actionable Refactoring Recommendations.
+
+### 9. Smart Onboarding Pathfinder for New Developers
+- 4-Phase Guided Contributor Journey:
+  - **Stage 1: Good First Issues & Safe Entry Points** (low CC, low LOC, isolated, 0 blast radius).
+  - **Stage 2: Utilities, Shared Types & Configs** (understand data contracts).
+  - **Stage 3: Feature Services & Components** (business logic).
+  - **Stage 4: Core Architectural Hubs & Orchestrators** (high coupling, must read first).
+- 1-click "Inspect in Graph" and "Preview Code" for every onboarding candidate.
+
+### 10. Zoom, Pan & Interactive Navigation
+- Zoom In, Zoom Out, Fit to Screen, Recompute Layout, Fullscreen mode.
+- Export Graph as high-resolution **PNG image** or **JSON format**.
+
+### 11. Large Repository & Heavy Load Engineering
+- **Repository-Level Caching**: `NodeCache` with 30-minute TTL and cache hit/miss tracking.
+- **Incremental Chunking**: Parallel file fetching via `p-limit` (8 concurrent requests max).
+- **Level of Detail (LOD) Aggregation**: Renders top 150 central nodes initially with instant toggle to show all nodes.
+
+---
+
+## 🏃 Quick Start Guide
+
+### 1. Start the Code Analyzer Engine (Port 5050)
 ```bash
+cd analyzer
+npm install
 npm run serve
 ```
 
-Send a `POST` request to `http://localhost:5050/analyze` with either files in memory or a folder path:
-```json
-// POST /analyze
-{
-  "files": [
-    { "path": "src/App.jsx", "content": "import Graph from './Graph'; export function App() {}" },
-    { "path": "src/Graph.jsx", "content": "export default function Graph() {}" }
-  ]
-}
+### 2. Start the GitHub Service Backend (Port 5000)
+```bash
+cd github-service
+npm install
+npm start
+```
+*(Optional: add `GITHUB_TOKEN=...` and `GEMINI_API_KEY=...` to `github-service/.env`)*
+
+### 3. Start the Frontend (Vite, Port 5173)
+```bash
+cd frontend/astral-frontend
+npm install
+npm run dev
 ```
 
-Or by directory path:
-```json
-// POST /analyze
-{
-  "repoPath": "./cloned-repos/react-sample"
-}
-```
-
-### Method B: Direct Node.js Import
-```javascript
-import { analyzeRepository, analyzeFiles } from "./analyzer/src/index.js";
-
-// Option 1: Analyze directory on disk
-const result = await analyzeRepository("./path/to/repo");
-
-// Option 2: Analyze files in memory (from GitHub API or memory zip)
-const result = await analyzeFiles([
-  { path: "App.jsx", content: "..." },
-  { path: "utils.js", content: "..." }
-]);
-```
+Open `http://localhost:5173` in your browser. Click **"⚡ Built-in Demo Repo"** to explore the complete architecture immediately!
 
 ---
 
-## 🧪 Testing & Benchmark Execution
+## 🧪 Testing & Verification
 
-Run the built-in test suite:
+Run the Analyzer test suite:
 ```bash
 cd analyzer
 npm test
+npm run test:
 ```
 
-Run CLI against any repository:
+Run Frontend linting and production build:
 ```bash
-cd analyzer
-npm run analyze -- ./test-repo
+cd frontend/astral-frontend
+npm run lint
+npm run build
 ```
-Results will be saved to `analyzer/analysis.json`.

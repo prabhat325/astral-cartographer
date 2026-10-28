@@ -1,19 +1,32 @@
 import { scanFiles } from "./fileScanner.js";
-import { analyzeImports } from "./importAnalyzer.js";
-import { analyzeSymbols } from "./symbolAnalyzer.js";
-import { analyzeFunctionCalls } from "./functionAnalyzer.js";
-import {
-  calculateLoc,
-  estimateTokens,
-  calculateCyclomaticComplexity
-} from "./metricsAnalyzer.js";
-import { buildGraph } from "./graphBuilder.js";
+import { CodeParser } from "./CodeParser.js";
+import { ASTAnalyzer } from "./ASTAnalyzer.js";
+import { DependencyAnalyzer } from "./DependencyAnalyzer.js";
+import { GraphBuilder } from "./GraphBuilder.js";
+import { AnalysisResult } from "./AnalysisResult.js";
+import { VisualizationService } from "./VisualizationService.js";
+import { ArchitecturalAIExpert } from "./ArchitecturalAIExpert.js";
+
+export {
+  CodeParser,
+  ASTAnalyzer,
+  DependencyAnalyzer,
+  GraphBuilder,
+  AnalysisResult,
+  VisualizationService,
+  ArchitecturalAIExpert
+};
 
 /**
  * Core analysis engine that processes a collection of files.
+ * Supports multi-language AST parsing (JS, TS, Python, Java, Go, C/C++, Rust, PHP).
  * @param {Array<{path: string, content: string}>} files
+ * @returns {AnalysisResult}
  */
 export function analyzeFiles(files) {
+  const astAnalyzer = new ASTAnalyzer();
+  const graphBuilder = new GraphBuilder();
+
   const importsByFile = {};
   const symbols = [];
   const functionCalls = [];
@@ -22,42 +35,30 @@ export function analyzeFiles(files) {
 
   for (const file of files) {
     try {
-      // 1. Code Metrics: LOC, Tokens, Cyclomatic Complexity
-      const loc = calculateLoc(file.content);
-      const tokenCount = estimateTokens(file.content);
-      const { fileComplexity, functionComplexities } = calculateCyclomaticComplexity(
-        file.content,
-        file.path
-      );
+      const fileAnalysis = astAnalyzer.analyzeFile(file.content, file.path);
+
+      importsByFile[file.path] = fileAnalysis.imports;
+      symbols.push(...fileAnalysis.symbols);
+      functionCalls.push(...fileAnalysis.functionCalls);
 
       fileMetrics[file.path] = {
-        loc,
-        tokenCount,
-        complexity: fileComplexity,
-        functionComplexities
+        loc: fileAnalysis.loc,
+        tokenCount: fileAnalysis.tokenCount,
+        complexity: fileAnalysis.complexity,
+        functionComplexities: fileAnalysis.functionComplexities
       };
 
-      // 2. Import & Dependency Analysis
-      importsByFile[file.path] = analyzeImports(file.content, file.path);
-
-      // 3. Symbol Extraction (Functions, Classes, Methods, Types)
-      const fileSymbols = analyzeSymbols(file.content, file.path);
-      // Enrich symbols with their function complexity if available
-      for (const sym of fileSymbols) {
-        const matched = functionComplexities.find((fc) => fc.name === sym.name);
-        if (matched) {
-          sym.complexity = matched.complexity;
-        }
+      if (fileAnalysis.error) {
+        errors.push({
+          file: file.path,
+          message: fileAnalysis.error
+        });
       }
-      symbols.push(...fileSymbols);
-
-      // 4. Function Call Graph
-      functionCalls.push(...analyzeFunctionCalls(file.content, file.path));
     } catch (error) {
       importsByFile[file.path] = [];
       fileMetrics[file.path] = {
-        loc: calculateLoc(file.content),
-        tokenCount: estimateTokens(file.content),
+        loc: { total: 0, code: 0, comment: 0, blank: 0 },
+        tokenCount: 0,
         complexity: 1,
         functionComplexities: []
       };
@@ -69,38 +70,42 @@ export function analyzeFiles(files) {
     }
   }
 
-  // 5. Build Graph & Compute Architectural Intelligence
-  const {
-    nodes,
-    edges,
-    callEdges,
-    circularCycles,
-    hotspots,
-    onboarding,
-    healthScore
-  } = buildGraph(files, importsByFile, functionCalls, fileMetrics);
+  // Build Graph (Files, Classes, Functions, Cycles, Hotspots, Onboarding, Health)
+  const graph = graphBuilder.build(files, importsByFile, symbols, functionCalls, fileMetrics);
 
-  return {
+  const totalClasses = graph.classNodes.length;
+  const totalFunctions = graph.functionNodes.length;
+
+  const result = new AnalysisResult({
     summary: {
       totalFiles: files.length,
-      totalEdges: edges.length,
+      totalEdges: graph.edges.length,
       totalSymbols: symbols.length,
+      totalClasses,
+      totalFunctions,
       totalFunctionCalls: functionCalls.length,
-      circularCyclesCount: circularCycles.length,
-      godFilesCount: nodes.filter((n) => n.isGodFile).length,
-      healthScore,
+      circularCyclesCount: graph.circularCycles.length,
+      godFilesCount: graph.godFilesCount,
+      healthScore: graph.healthScore,
+      avgComplexity: graph.avgComplexity,
       totalErrors: errors.length
     },
-    nodes,
-    edges,
-    callEdges,
-    circularCycles,
-    hotspots,
-    onboarding,
+    nodes: graph.nodes,
+    edges: graph.edges,
+    classNodes: graph.classNodes,
+    classEdges: graph.classEdges,
+    functionNodes: graph.functionNodes,
+    functionEdges: graph.functionEdges,
+    callEdges: graph.callEdges,
+    circularCycles: graph.circularCycles,
+    hotspots: graph.hotspots,
+    onboarding: graph.onboarding,
     symbols,
     functionCalls,
     errors
-  };
+  });
+
+  return result.toJSON();
 }
 
 /**

@@ -1,108 +1,59 @@
 require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
-const { analyzeFiles } = require("../analyzer");
-const {
-    parseGitHubUrl,
-    getRepository,
-    getRepositoryTree,
-    filterSourceFiles,
-    getSourceFiles
-} = require("./githubClient");
+const rateLimit = require("express-rate-limit");
+const { RepositoryController } = require("./RepositoryController");
 
 const app = express();
+const controller = new RepositoryController();
 
+// ────────────────────────────────────────────────────────────────
+// Middleware
+// ────────────────────────────────────────────────────────────────
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
 
-app.get("/", (req, res) => {
-    res.json({
-        message: "Astral Cartographer Backend Service is running"
-    });
+// Express-level rate limiter: max 30 analysis requests per 15 min per IP
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, error: "Too many requests. Please wait 15 minutes." }
 });
 
-async function handleAnalyze(req, res) {
-    try {
-        const { repoUrl } = req.body;
+// ────────────────────────────────────────────────────────────────
+// Routes
+// ────────────────────────────────────────────────────────────────
+app.get("/", (_req, res) => {
+  res.json({ message: "The Astral Cartographer Backend Service is running" });
+});
 
-        if (!req.body || typeof req.body !== "object") {
-            return res.status(400).json({
-                success: false,
-                error: "Request body must be a JSON object"
-            });
-        }
+// Health Check
+app.get("/health", (req, res) => controller.handleHealth(req, res));
 
-        if (typeof repoUrl !== "string" || !repoUrl.trim()) {
-            return res.status(400).json({
-                success: false,
-                error: "A valid repoUrl is required"
-            });
-        }
+// Analysis Endpoints
+app.post("/analyze", apiLimiter, (req, res) => controller.handleAnalyze(req, res));
+app.post("/api/analyze", apiLimiter, (req, res) => controller.handleAnalyze(req, res));
 
-        let parsedUrl;
-        try {
-            parsedUrl = new URL(repoUrl);
-        } catch {
-            return res.status(400).json({
-                success: false,
-                error: "Invalid URL format"
-            });
-        }
+// AI Explanation Endpoints
+app.post("/ai/explain", (req, res) => controller.handleAiExplain(req, res));
+app.post("/api/ai/explain", (req, res) => controller.handleAiExplain(req, res));
 
-        if (
-            parsedUrl.protocol !== "https:" ||
-            parsedUrl.hostname !== "github.com"
-        ) {
-            return res.status(400).json({
-                success: false,
-                error: "Please provide a valid GitHub repository URL"
-            });
-        }
+// Cache Management Endpoints
+app.delete("/cache", (req, res) => controller.handleClearCache(req, res));
+app.get("/cache/stats", (req, res) => controller.handleCacheStats(req, res));
 
-        const { owner, repo } = parseGitHubUrl(repoUrl);
-
-        const repository = await getRepository(owner, repo);
-
-        const tree = await getRepositoryTree(owner, repo);
-
-        const sourceFiles = filterSourceFiles(tree);
-
-        const files = await getSourceFiles(
-            owner,
-            repo,
-            sourceFiles
-        );
-
-        const architecture = analyzeFiles(files);
-
-        return res.json({
-            success: true,
-            repository: {
-                name: repository.name,
-                fullName: repository.full_name,
-                description: repository.description
-            },
-            totalFiles: files.length,
-            files,
-            architecture
-        });
-
-    } catch (error) {
-        console.error("Analysis request failed:", error.message);
-
-        return res.status(500).json({
-            success: false,
-            error: error.message
-        });
-    }
-}
-
-// Support both /analyze and /api/analyze endpoints
-app.post("/analyze", handleAnalyze);
-app.post("/api/analyze", handleAnalyze);
-
+// ────────────────────────────────────────────────────────────────
+// Start Server
+// ────────────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 5000;
-
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`\n🚀  The Astral Cartographer Backend running on http://localhost:${PORT}`);
+  console.log(`   Architecture: RepositoryController & GitHubService`);
+  console.log(`   Cache: ✅ in-memory (TTL 30 min)`);
+  console.log(`   Rate limit: 30 requests / 15 min / IP\n`);
 });
+
+module.exports = app;
