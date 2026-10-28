@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useAnalysis } from '../context/AnalysisContext';
 
 function HealthRing({ score }) {
@@ -26,91 +26,58 @@ function HealthRing({ score }) {
   );
 }
 
-function StatCard({ label, value, sub, color, icon }) {
+function StatCard({ label, value, sub, color }) {
   return (
     <div className="stat-card fade-in">
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div className="stat-label">{label}</div>
-        {icon && <span style={{ fontSize: 14, opacity: 0.7 }}>{icon}</span>}
-      </div>
+      <div className="stat-label">{label}</div>
       <div className="stat-value" style={color ? { color } : {}}>{value}</div>
       {sub && <div className="stat-meta">{sub}</div>}
     </div>
   );
 }
 
-const EMPTY_ARR = [];
+function MetricRow({ label, value, max = 100, color = 'var(--color-primary)' }) {
+  const pct = Math.min((value / max) * 100, 100);
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+        <span style={{ color: 'var(--color-on-surface-variant)' }}>{label}</span>
+        <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600, color: 'var(--color-on-surface)' }}>{value}</span>
+      </div>
+      <div className="progress-bar">
+        <div className="progress-fill" style={{ width: `${pct}%`, background: color }} />
+      </div>
+    </div>
+  );
+}
 
-const EMPTY_OBJ = {};
+const EMPTY_ARR = [];
 
 export default function OverviewPage() {
   const { state, setView } = useAnalysis();
   const { result } = state;
-
-  const [activeTab, setActiveTab] = useState('summary');
 
   const repository = result?.repository;
   const architecture = result?.architecture;
   const summary = architecture?.summary;
   const nodes = architecture?.nodes || EMPTY_ARR;
   const hotspots = architecture?.hotspots || EMPTY_ARR;
+  const onboarding = architecture?.onboarding || EMPTY_ARR;
   const hs = summary?.healthScore ?? 0;
-
-  const branches = repository?.branches || EMPTY_ARR;
-  const commits = repository?.commits || EMPTY_ARR;
-  const rawLanguages = repository?.languages || EMPTY_OBJ;
-
-  // Compute total LOC across nodes
-  const totalLoc = useMemo(() => {
-    return nodes.reduce(
-      (acc, n) => {
-        acc.total += n.loc?.total || 0;
-        acc.code += n.loc?.code || 0;
-        acc.comment += n.loc?.comment || 0;
-        return acc;
-      },
-      { total: 0, code: 0, comment: 0 }
-    );
-  }, [nodes]);
-
-  // Max complexity
-  const maxComplexity = useMemo(() => {
-    return nodes.reduce((max, n) => Math.max(max, n.complexity || 1), 1);
-  }, [nodes]);
 
   const topHotspots = useMemo(() =>
     [...hotspots].sort((a, b) => (b.complexity || 0) - (a.complexity || 0)).slice(0, 5),
     [hotspots]
   );
 
-  // Language breakdown
-  const languageList = useMemo(() => {
-    if (Object.keys(rawLanguages).length > 0) {
-      const totalBytes = Object.values(rawLanguages).reduce((a, b) => a + b, 0) || 1;
-      return Object.entries(rawLanguages)
-        .sort((a, b) => b[1] - a[1])
-        .map(([lang, bytes]) => ({
-          name: lang,
-          pct: Math.round((bytes / totalBytes) * 100),
-          bytes
-        }));
-    }
-    // Fallback from nodes extensions
+  const langBreakdown = useMemo(() => {
     const counts = {};
     nodes.forEach((n) => {
       const ext = n.extension || '.js';
       counts[ext] = (counts[ext] || 0) + 1;
     });
-    const totalFiles = Math.max(1, nodes.length);
-    return Object.entries(counts)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 6)
-      .map(([ext, count]) => ({
-        name: ext,
-        pct: Math.round((count / totalFiles) * 100),
-        count
-      }));
-  }, [rawLanguages, nodes]);
+    return Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 6);
+  }, [nodes]);
 
   if (!result) return null;
 
@@ -118,278 +85,144 @@ export default function OverviewPage() {
   const healthColor = hs >= 80 ? '#047857' : hs >= 60 ? '#b45309' : hs >= 40 ? '#b45309' : '#b91c1c';
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24, maxWidth: 1100, margin: '0 auto', width: '100%', paddingBottom: 40 }}>
-
-      {/* Repo header banner */}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24, maxWidth: 1100, margin: '0 auto', width: '100%' }}>
+      {/* Repo header */}
       <div className="fade-in" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
         <div>
-          <div className="section-eyebrow">GitHub Repository Overview</div>
+          <div className="section-eyebrow">Repository</div>
           <h1 className="section-title">{repository?.fullName || repository?.name}</h1>
           {repository?.description && (
-            <p style={{ fontSize: 14, color: 'var(--color-on-surface-variant)', marginTop: 6, maxWidth: 640 }}>
+            <p style={{ fontSize: 14, color: 'var(--color-on-surface-variant)', marginTop: 6, maxWidth: 560 }}>
               {repository.description}
             </p>
           )}
         </div>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-          {repository?.htmlUrl && (
-            <a href={repository.htmlUrl} target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ fontSize: 12 }}>
-              GitHub Repo ↗
-            </a>
-          )}
-          <button className="btn btn-primary" onClick={() => setView('dependency')}>
-            Interactive Graph ➔
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button className="btn btn-secondary" onClick={() => setView('dependency')}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+            </svg>
+            View Graph
+          </button>
+          <button className="btn btn-secondary" onClick={() => setView('health')}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+            Health Report
           </button>
         </div>
       </div>
 
-      {/* GitHub Repository Metadata Card */}
-      <div className="card fade-in" style={{ padding: '16px 20px', background: 'var(--color-surface-container-low)' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 16 }}>
-          <div>
-            <div className="stat-label">Stars</div>
-            <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--color-on-surface)' }}>
-              ⭐ {repository?.stars?.toLocaleString() ?? '—'}
-            </div>
-          </div>
-          <div>
-            <div className="stat-label">Forks</div>
-            <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--color-on-surface)' }}>
-              🍴 {repository?.forks?.toLocaleString() ?? '—'}
-            </div>
-          </div>
-          <div>
-            <div className="stat-label">Watchers</div>
-            <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--color-on-surface)' }}>
-              👁️ {repository?.watchers?.toLocaleString() ?? '—'}
-            </div>
-          </div>
-          <div>
-            <div className="stat-label">Open Issues</div>
-            <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--color-on-surface)' }}>
-              ⚠️ {repository?.openIssues ?? '—'}
-            </div>
-          </div>
-          <div>
-            <div className="stat-label">Default Branch</div>
-            <div style={{ fontSize: 14, fontWeight: 600, fontFamily: 'var(--font-mono)', color: 'var(--color-primary)' }}>
-              🌿 {repository?.defaultBranch || 'main'}
-            </div>
-          </div>
-          <div>
-            <div className="stat-label">License</div>
-            <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--color-on-surface)' }}>
-              ⚖️ {repository?.license || 'MIT'}
-            </div>
-          </div>
-          <div>
-            <div className="stat-label">Repo Size</div>
-            <div style={{ fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-mono)', color: 'var(--color-on-surface)' }}>
-              📦 {repository?.sizeKb ? `${repository.sizeKb} KB` : `${nodes.length} files`}
-            </div>
-          </div>
-        </div>
+      {/* Stats */}
+      <div className="stats-grid">
+        <StatCard label="Source Files"       value={summary?.totalFiles?.toLocaleString()}    sub="Analyzed files" />
+        <StatCard label="Dependencies"       value={summary?.totalEdges?.toLocaleString()}    sub="Import edges" />
+        <StatCard label="Symbols"            value={summary?.totalSymbols?.toLocaleString()}  sub="Functions / Classes" />
+        <StatCard label="Circular Cycles"    value={summary?.circularCyclesCount}            sub="Dependency loops"
+          color={summary?.circularCyclesCount > 0 ? 'var(--color-coral)' : 'var(--color-emerald)'} />
+        <StatCard label="God Files"          value={summary?.godFilesCount}                  sub="High coupling nodes"
+          color={summary?.godFilesCount > 0 ? 'var(--color-amber)' : 'var(--color-emerald)'} />
+        <StatCard label="Parse Errors"       value={summary?.totalErrors}                    sub="Files skipped"
+          color={summary?.totalErrors > 0 ? 'var(--color-amber)' : ''} />
       </div>
 
-      {/* High-level metrics row */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 16 }}>
-        <StatCard label="Total Files" value={summary?.totalFiles ?? nodes.length} sub="Source modules" icon="📁" />
-        <StatCard label="Total Code LOC" value={totalLoc.code ? totalLoc.code.toLocaleString() : '—'} sub={`${totalLoc.total} total lines`} icon="📝" />
-        <StatCard label="Classes & Structs" value={summary?.totalClasses ?? 0} sub="Extracted AST types" icon="🏛️" />
-        <StatCard label="Functions & Methods" value={summary?.totalFunctions ?? summary?.totalSymbols ?? 0} sub="Callable components" icon="⚡" />
-        <StatCard label="Dependencies / Edges" value={summary?.totalEdges ?? 0} sub={`${summary?.circularCyclesCount ?? 0} circular`} icon="🔗" />
-        <StatCard label="Avg Complexity" value={summary?.avgComplexity ?? 1} sub={`Max: ${maxComplexity}`} icon="📊" />
-      </div>
-
-      {/* Main 2-column layout: Health score + Architecture Summary */}
-      <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: 24, alignItems: 'start' }}>
-
-        {/* Health card */}
-        <div className="card fade-in" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 16 }}>
-          <div style={{ fontWeight: 600, fontSize: 14, color: 'var(--color-on-surface)', alignSelf: 'flex-start' }}>
-            Architecture Health Score
+      {/* 3-column lower section */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr 1fr', gap: 20, alignItems: 'start', flexWrap: 'wrap' }}>
+        {/* Health ring */}
+        <div className="card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, padding: 24 }}>
+          <div style={{ fontSize: 12, fontWeight: 600, letterSpacing: '0.04em', color: 'var(--color-outline)', textTransform: 'uppercase' }}>
+            Health Score
           </div>
           <HealthRing score={hs} />
-          <div>
-            <span className="pill" style={{ background: `${healthColor}18`, color: healthColor, fontWeight: 700, fontSize: 12 }}>
-              {healthLabel} Health
-            </span>
-            <div style={{ fontSize: 12, color: 'var(--color-on-surface-variant)', marginTop: 8 }}>
-              {summary?.circularCyclesCount ? `⚠️ ${summary.circularCyclesCount} circular import loop(s) detected.` : '✅ Clean dependency acyclicity.'}
-              {summary?.godFilesCount ? ` ${summary.godFilesCount} God file(s) require refactoring.` : ''}
-            </div>
+          <div style={{
+            fontSize: 16, fontWeight: 700, color: healthColor,
+            padding: '4px 14px', borderRadius: 'var(--radius-full)',
+            background: `${healthColor}18`,
+          }}>
+            {healthLabel}
           </div>
-          <div style={{ width: '100%', borderTop: '1px solid var(--color-outline-variant)', paddingTop: 14, display: 'flex', flexDirection: 'column', gap: 8, fontSize: 12 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <span style={{ color: 'var(--color-on-surface-variant)' }}>Circular Cycles</span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600, color: summary?.circularCyclesCount ? 'var(--color-coral)' : 'var(--color-emerald)' }}>
-                {summary?.circularCyclesCount ?? 0}
-              </span>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <span style={{ color: 'var(--color-on-surface-variant)' }}>God Files</span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600, color: summary?.godFilesCount ? 'var(--color-amber)' : 'var(--color-emerald)' }}>
-                {summary?.godFilesCount ?? 0}
-              </span>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <span style={{ color: 'var(--color-on-surface-variant)' }}>AST Parse Errors</span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>{summary?.totalErrors ?? 0}</span>
-            </div>
+          <div style={{ fontSize: 12, color: 'var(--color-on-surface-variant)', textAlign: 'center', lineHeight: 1.5 }}>
+            Based on complexity, coupling, and cycle density
           </div>
-          <button className="btn btn-secondary" style={{ width: '100%', fontSize: 12 }} onClick={() => setView('health')}>
-            View Full Health Breakdown ➔
-          </button>
         </div>
 
-        {/* Tabbed right section: Summary / Commits / Branches / Hotspots */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-
-          {/* Tab Selector */}
-          <div className="tab-bar" style={{ display: 'flex' }}>
-            <button className={`tab-item${activeTab === 'summary' ? ' active' : ''}`} onClick={() => setActiveTab('summary')}>
-              Architectural Hotspots
-            </button>
-            <button className={`tab-item${activeTab === 'languages' ? ' active' : ''}`} onClick={() => setActiveTab('languages')}>
-              Languages
-            </button>
-            <button className={`tab-item${activeTab === 'commits' ? ' active' : ''}`} onClick={() => setActiveTab('commits')}>
-              Recent Commits ({commits.length})
-            </button>
-            <button className={`tab-item${activeTab === 'branches' ? ' active' : ''}`} onClick={() => setActiveTab('branches')}>
-              Branches ({branches.length})
-            </button>
+        {/* Language breakdown */}
+        <div className="card">
+          <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 16, color: 'var(--color-on-surface)' }}>
+            File Extensions
           </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {langBreakdown.map(([ext, cnt]) => (
+              <MetricRow key={ext} label={ext} value={cnt} max={nodes.length || 1} />
+            ))}
+          </div>
+        </div>
 
-          {/* TAB: Architectural Hotspots */}
-          {activeTab === 'summary' && (
-            <div className="card fade-in" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontWeight: 600, fontSize: 14 }}>Top Complexity Hotspots</span>
-                <span className="pill pill-warn">{hotspots.length} detected</span>
-              </div>
-              {topHotspots.length === 0 ? (
-                <div className="alert alert-success">No high-risk hotspots found in this repository.</div>
-              ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                  {topHotspots.map((h, i) => (
-                    <div key={i} style={{
-                      padding: '10px 14px', borderRadius: 'var(--radius)',
-                      background: 'var(--color-surface-container-low)',
-                      border: '1px solid var(--color-outline-variant)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12
-                    }}>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                          {h.file}
-                        </div>
-                        <div style={{ fontSize: 11, color: 'var(--color-on-surface-variant)', marginTop: 2 }}>
-                          {h.reason || `Complexity ${h.complexity}, ${h.inDegree} dependents`}
-                        </div>
-                      </div>
-                      <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-                        <span className={`pill ${h.riskLevel === 'critical' ? 'pill-error' : 'pill-warn'}`} style={{ fontSize: 10 }}>
-                          CC {h.complexity}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-              <div style={{ display: 'flex', gap: 10, marginTop: 4 }}>
-                <button className="btn btn-secondary" style={{ flex: 1, fontSize: 12 }} onClick={() => setView('onboarding')}>
-                  Open Onboarding Pathfinder ➔
-                </button>
-                <button className="btn btn-primary" style={{ flex: 1, fontSize: 12 }} onClick={() => setView('dependency')}>
-                  Inspect in Graph ➔
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* TAB: Languages */}
-          {activeTab === 'languages' && (
-            <div className="card fade-in" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-              <div style={{ fontWeight: 600, fontSize: 14 }}>Language Distribution</div>
-              {/* Visual Multi-color Progress Bar */}
-              <div style={{ display: 'flex', height: 12, borderRadius: 6, overflow: 'hidden', width: '100%' }}>
-                {languageList.map((lang, idx) => {
-                  const colors = ['#f59e0b', '#3b82f6', '#10b981', '#06b6d4', '#8b5cf6', '#ec4899'];
-                  return (
-                    <div key={lang.name} style={{ width: `${lang.pct}%`, background: colors[idx % colors.length] }} title={`${lang.name}: ${lang.pct}%`} />
-                  );
-                })}
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 12 }}>
-                {languageList.map((lang) => (
-                  <div key={lang.name} style={{ padding: '8px 12px', borderRadius: 'var(--radius)', background: 'var(--color-surface-container-low)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600 }}>{lang.name}</span>
-                    <span className="pill pill-neutral" style={{ fontSize: 11 }}>{lang.pct}%</span>
+        {/* Hotspots */}
+        <div className="card">
+          <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 16, color: 'var(--color-on-surface)' }}>
+            Top Complexity Hotspots
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {topHotspots.length === 0 ? (
+              <div style={{ fontSize: 12, color: 'var(--color-outline)', textAlign: 'center', padding: 16 }}>No hotspots detected</div>
+            ) : topHotspots.map((h, i) => (
+              <div key={h.id || i} style={{
+                display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px',
+                borderRadius: 'var(--radius)', background: 'var(--color-surface-container-low)',
+              }}>
+                <div style={{
+                  width: 24, height: 24, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  background: i === 0 ? 'rgba(239,68,68,0.12)' : 'rgba(245,158,11,0.12)',
+                  fontSize: 10, fontWeight: 700,
+                  color: i === 0 ? 'var(--color-coral)' : 'var(--color-amber)',
+                  flexShrink: 0,
+                }}>{i + 1}</div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {h.name || h.id}
                   </div>
-                ))}
+                  <div style={{ fontSize: 11, color: 'var(--color-on-surface-variant)' }}>
+                    complexity {h.complexity}
+                  </div>
+                </div>
+                <span className={`pill ${h.complexity > 10 ? 'pill-error' : 'pill-warn'}`}>
+                  CC {h.complexity}
+                </span>
               </div>
-            </div>
-          )}
-
-          {/* TAB: Recent Commits */}
-          {activeTab === 'commits' && (
-            <div className="card fade-in" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontWeight: 600, fontSize: 14 }}>Recent Commits (GitHub REST API)</span>
-                <span className="pill pill-neutral">{commits.length} commits</span>
-              </div>
-              {commits.length === 0 ? (
-                <div className="empty-state" style={{ padding: 20 }}>
-                  <div className="empty-state-text">No commit logs retrieved for this repository.</div>
-                </div>
-              ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxHeight: 360, overflowY: 'auto' }}>
-                  {commits.map((c, i) => (
-                    <div key={i} style={{ padding: '8px 12px', borderRadius: 'var(--radius)', background: 'var(--color-surface-container-low)', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
-                      <div style={{ minWidth: 0, flex: 1 }}>
-                        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-on-surface)' }}>{c.message}</div>
-                        <div style={{ fontSize: 11, color: 'var(--color-on-surface-variant)', marginTop: 2 }}>
-                          {c.author} {c.date ? `· ${new Date(c.date).toLocaleDateString()}` : ''}
-                        </div>
-                      </div>
-                      <span className="pill pill-neutral" style={{ fontFamily: 'var(--font-mono)', fontSize: 10 }}>
-                        {c.sha}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* TAB: Branches */}
-          {activeTab === 'branches' && (
-            <div className="card fade-in" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontWeight: 600, fontSize: 14 }}>Branches (GitHub REST API)</span>
-                <span className="pill pill-neutral">{branches.length} branches</span>
-              </div>
-              {branches.length === 0 ? (
-                <div className="empty-state" style={{ padding: 20 }}>
-                  <div className="empty-state-text">No branch data retrieved.</div>
-                </div>
-              ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 10 }}>
-                  {branches.map((b, i) => (
-                    <div key={i} style={{ padding: '8px 12px', borderRadius: 'var(--radius)', background: 'var(--color-surface-container-low)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600 }}>🌿 {b.name}</span>
-                      {b.protected && <span className="pill pill-primary" style={{ fontSize: 10 }}>protected</span>}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
+            ))}
+          </div>
         </div>
-
       </div>
 
+      {/* Onboarding path */}
+      {onboarding.length > 0 && (
+        <div className="card fade-in">
+          <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 4 }}>🚀 Suggested Onboarding Path</div>
+          <div style={{ fontSize: 12, color: 'var(--color-on-surface-variant)', marginBottom: 16 }}>
+            Start with low-complexity, low-coupling files to understand the codebase
+          </div>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            {onboarding.slice(0, 8).map((f, i) => (
+              <div key={i} style={{
+                display: 'flex', alignItems: 'center', gap: 6,
+                padding: '5px 12px', borderRadius: 'var(--radius-full)',
+                background: 'var(--color-surface-container-low)',
+                border: '1px solid var(--color-outline-variant)', fontSize: 12,
+              }}>
+                <span style={{
+                  width: 18, height: 18, borderRadius: '50%', background: 'var(--color-primary)',
+                  color: '#fff', fontSize: 9, fontWeight: 700,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                }}>{i + 1}</span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11 }}>{f}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

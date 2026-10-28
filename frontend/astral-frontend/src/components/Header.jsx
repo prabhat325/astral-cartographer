@@ -3,9 +3,8 @@ import { useAnalysis } from '../context/AnalysisContext';
 
 const VIEWS = [
   { key: 'home',         label: 'New Analysis' },
-  { key: 'overview',     label: 'Overview & Stats' },
+  { key: 'overview',     label: 'Overview' },
   { key: 'dependency',   label: 'Dependency Explorer' },
-  { key: 'onboarding',   label: 'Onboarding Pathfinder' },
   { key: 'codeExplorer', label: 'Code Explorer' },
   { key: 'health',       label: 'Architecture Health' },
 ];
@@ -38,33 +37,27 @@ export default function Header() {
 
   return (
     <header className="app-header">
-      {/* Logo and Team Branding */}
+      {/* Logo */}
       <button className="app-header-logo" onClick={() => setView('home')}>
         <AstralIcon />
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left' }}>
-          <span className="app-header-title">The Astral Cartographer</span>
-          <span style={{ fontSize: 9, color: 'var(--color-outline)', fontWeight: 600, letterSpacing: '0.04em' }}>
-            Webster 2026 · Team 262: DeDevelopers
-          </span>
-        </div>
+        <span className="app-header-title">Astral Cartographer</span>
+        <span className="app-header-badge">v1.0 Beta</span>
       </button>
 
       {/* Context breadcrumb */}
       {hasResult && (
         <div style={{
           display: 'flex', alignItems: 'center', gap: '6px',
-          fontFamily: 'var(--font-mono)', fontSize: '11px',
+          fontFamily: 'var(--font-mono)', fontSize: '12px',
           padding: '4px 10px', background: 'var(--color-surface-container)',
           borderRadius: 'var(--radius-full)', color: 'var(--color-on-surface)',
         }}>
-          <span style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--color-emerald)', display: 'inline-block' }} />
-          <span style={{ fontWeight: 600, maxWidth: 180, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            {result.repository?.fullName || 'analysis'}
-          </span>
+          <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--color-emerald)', display: 'inline-block' }} />
+          <span style={{ fontWeight: 600 }}>{result.repository?.fullName || 'analysis'}</span>
         </div>
       )}
 
-      {/* Navigation tabs */}
+      {/* Nav */}
       <nav className="app-nav" style={{ flex: 1, justifyContent: 'center' }}>
         {VIEWS.map((v) => {
           if (!hasResult && v.key !== 'home') return null;
@@ -89,7 +82,7 @@ export default function Header() {
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         {healthScore !== null && (
           <div style={{
-            fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 700,
+            fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600,
             padding: '3px 10px', borderRadius: 'var(--radius-full)',
             background: healthScore >= 80 ? 'rgba(16,185,129,0.1)' : healthScore >= 50 ? 'rgba(245,158,11,0.1)' : 'rgba(239,68,68,0.1)',
             color: healthScore >= 80 ? '#047857' : healthScore >= 50 ? '#b45309' : '#b91c1c',
