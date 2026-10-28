@@ -1,150 +1,16 @@
-require("dotenv").config();
+const { GitHubService } = require("./GitHubService");
 
-const { Octokit } = require("@octokit/rest");
+const defaultService = new GitHubService();
 
-const octokit = new Octokit({
-    auth: process.env.GITHUB_TOKEN
-});
-
-// Check whether token is loaded and verify auth
-console.log("GitHub token loaded:", Boolean(process.env.GITHUB_TOKEN));
-
-async function checkAuth() {
-    if (process.env.GITHUB_TOKEN) {
-        const response = await octokit.rest.users.getAuthenticated();
-        console.log("Authenticated as:", response.data.login);
-    }
-}
-
-checkAuth().catch(error => {
-    console.log("Auth check warning:", error.message);
-});
-
-function parseGitHubUrl(repoUrl) {
-    const url = new URL(repoUrl);
-
-    if (url.hostname !== "github.com") {
-        throw new Error("Invalid GitHub URL");
-    }
-
-    const parts = url.pathname.split("/").filter(Boolean);
-
-    if (parts.length < 2) {
-        throw new Error("Invalid GitHub repository URL");
-    }
-
-    return {
-        owner: parts[0],
-        repo: parts[1].replace(".git", "")
-    };
-}
-
-async function getRepository(owner, repo) {
-    const response = await octokit.rest.repos.get({
-        owner,
-        repo
-    });
-
-    return response.data;
-}
-async function getRepositoryTree(owner, repo) {
-    const response = await octokit.rest.git.getTree({
-        owner,
-        repo,
-        tree_sha: "HEAD",
-        recursive: "true"
-    });
-
-    return response.data.tree;
-}
-function filterSourceFiles(tree) {
-    const allowedExtensions = [
-        ".js",
-        ".jsx",
-        ".ts",
-        ".tsx",
-        ".py",
-        ".java",
-        ".cpp",
-        ".c",
-        ".h",
-        ".go",
-        ".rs",
-        ".php"
-    ];
-
-    const ignoredPaths = [
-        "node_modules/",
-        ".git/",
-        "dist/",
-        "build/",
-        "coverage/"
-    ];
-
-    return tree.filter((item) => {
-        if (item.type !== "blob") {
-            return false;
-        }
-
-        const path = item.path.toLowerCase();
-
-        if (ignoredPaths.some((ignored) => path.includes(ignored))) {
-            return false;
-        }
-
-        return allowedExtensions.some((extension) =>
-            path.endsWith(extension)
-        );
-    });
-}
-async function getFileContent(owner, repo, path) {
-    const response = await octokit.rest.repos.getContent({
-        owner,
-        repo,
-        path
-    });
-
-    if (Array.isArray(response.data)) {
-        throw new Error("The provided path is a directory, not a file");
-    }
-
-    if (response.data.encoding !== "base64") {
-        throw new Error("Unsupported file encoding");
-    }
-
-    return Buffer
-        .from(response.data.content, "base64")
-        .toString("utf-8");
-}
-async function getSourceFiles(owner, repo, sourceFiles) {
-    const files = [];
-
-    for (const file of sourceFiles) {
-        try {
-            const content = await getFileContent(
-                owner,
-                repo,
-                file.path
-            );
-
-            files.push({
-                path: file.path,
-                content: content
-            });
-        } catch (error) {
-            console.log(
-                `Skipping ${file.path}: ${error.message}`
-            );
-        }
-    }
-
-    return files;
-}
 module.exports = {
-    parseGitHubUrl,
-    getRepository,
-    getRepositoryTree,
-    filterSourceFiles,
-    getFileContent,
-    getSourceFiles
+  GitHubService,
+  parseGitHubUrl: (url) => defaultService.parseGitHubUrl(url),
+  getRepository: (owner, repo) => defaultService.getRepositoryMetadata(owner, repo),
+  getRepositoryTree: (owner, repo) => defaultService.getRepositoryTree(owner, repo),
+  filterSourceFiles: (tree) => defaultService.filterSourceFiles(tree),
+  getFileContent: (owner, repo, path) => defaultService.getFileContent(owner, repo, path),
+  getSourceFiles: (owner, repo, files) => defaultService.getSourceFiles(owner, repo, files),
+  getBranches: (owner, repo) => defaultService.getBranches(owner, repo),
+  getCommits: (owner, repo) => defaultService.getCommits(owner, repo),
+  getLanguages: (owner, repo) => defaultService.getLanguages(owner, repo)
 };
