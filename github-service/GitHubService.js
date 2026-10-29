@@ -214,7 +214,8 @@ class GitHubService {
    * Fetch source files in manageable parallel chunks with concurrency limiting.
    */
   async getSourceFiles(owner, repo, sourceFiles, maxFiles = 400) {
-    const pLimit = require("p-limit");
+    const pLimitModule = require("p-limit");
+    const pLimit = pLimitModule.default || pLimitModule;
     const limit = pLimit(8); // 8 parallel requests max
     const filesToFetch = sourceFiles.slice(0, maxFiles);
 
@@ -237,4 +238,3 @@ class GitHubService {
 }
 
 module.exports = { GitHubService };
-

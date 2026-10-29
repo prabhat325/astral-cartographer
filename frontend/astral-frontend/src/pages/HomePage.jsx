@@ -6,20 +6,21 @@ import {
   Activity, 
   AlertTriangle, 
   Code2, 
-  Compass,
-  X,
-  Zap,
+  Compass, 
+  X, 
+  Zap, 
   Network,
-  ChevronDown
+  Terminal,
+  Info
 } from 'lucide-react';
 
 const EXAMPLES = [
-  'astral-sh/ruff',
-  'expressjs/express',
-  'fastapi/fastapi',
   'facebook/react',
-  'vercel/turborepo',
+  'expressjs/express',
+  'astral-sh/ruff',
+  'fastapi/fastapi',
   'vuejs/vue',
+  'vercel/turborepo',
 ];
 
 const ANALYSIS_STEPS = [
@@ -35,10 +36,11 @@ const ANALYSIS_STEPS = [
 ];
 
 export default function HomePage() {
-  const { state, runAnalysis, setRepoUrl, loadDemo, setBranch } = useAnalysis();
-  const { status, error, repoUrl, branch = 'main' } = state;
+  const { state, runAnalysis, setRepoUrl, loadDemo } = useAnalysis();
+  const { status, error, repoUrl } = state;
 
   const [localSlug, setLocalSlug] = useState(repoUrl || '');
+  const [inputError, setInputError] = useState('');
   const [progress, setProgress] = useState(0);
   const [stepIdx, setStepIdx] = useState(0);
   const intervalRef = useRef(null);
@@ -73,12 +75,32 @@ export default function HomePage() {
   }, [loading, status]);
 
   function handleSubmit(e) {
-    e.preventDefault();
-    const clean = localSlug.trim();
-    if (!clean) return;
-    setRepoUrl(clean);
-    runAnalysis(clean);
+    if (e) e.preventDefault();
+    setInputError('');
+    const raw = localSlug.trim();
+    if (!raw) {
+      setInputError('Please enter a GitHub repository URL or slug.');
+      return;
+    }
+
+    // Client-side validation: ensure owner/repo format is present
+    const cleaned = raw.replace(/^https?:\/\/(www\.)?github\.com\//i, '').replace(/\/+$/, '');
+    const parts = cleaned.split('/').filter(Boolean);
+    if (parts.length < 2) {
+      setInputError('Please enter a valid GitHub repository in the format "owner/repo" (e.g. facebook/react) or a full GitHub URL.');
+      return;
+    }
+
+    setRepoUrl(raw);
+    runAnalysis(raw);
   }
+
+  const isBackendOffline = error && (
+    error.includes('localhost:5000') || 
+    error.includes('Failed to fetch') || 
+    error.includes('backend service') ||
+    error.includes('offline')
+  );
 
   return (
     <div style={{
@@ -157,45 +179,43 @@ export default function HomePage() {
         borderRadius: 'var(--radius-xl)',
       }}>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-          {/* URL Input Bar */}
-          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          
+          {/* Single Unified URL Input Bar */}
+          <div style={{ display: 'flex', gap: 12, alignItems: 'stretch', flexWrap: 'wrap' }}>
             <div style={{
-              flex: 1,
-              minWidth: 260,
+              flex: '1 1 340px',
               display: 'flex',
               alignItems: 'center',
               background: 'var(--color-pearl-white)',
               border: '1.5px solid var(--border-gold-solid)',
               borderRadius: 'var(--radius-md)',
               padding: '0 16px',
-              gap: 10,
-              boxShadow: 'inset 0 1px 3px rgba(67, 40, 50, 0.03)',
+              gap: 12,
+              boxShadow: 'inset 0 1px 3px rgba(67, 40, 50, 0.04)',
               transition: 'all 0.2s ease',
             }}>
-              <Compass size={18} color="var(--color-antique-gold)" style={{ flexShrink: 0 }} />
-              <span style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: 13,
-                fontWeight: 600,
-                color: 'var(--color-antique-gold)',
-                whiteSpace: 'nowrap'
-              }}>
-                github.com/
-              </span>
+              <Compass size={19} color="var(--color-antique-gold)" style={{ flexShrink: 0 }} />
               <input
+                type="text"
                 className="input-royal"
                 value={localSlug}
-                onChange={(e) => setLocalSlug(e.target.value)}
-                placeholder="organization/repository"
+                onChange={(e) => {
+                  setLocalSlug(e.target.value);
+                  if (inputError) setInputError('');
+                }}
+                placeholder="Enter GitHub URL or owner/repo (e.g. https://github.com/facebook/react)"
                 style={{
+                  flex: 1,
                   border: 'none',
                   background: 'transparent',
                   padding: '14px 0',
                   boxShadow: 'none',
                   fontFamily: 'var(--font-mono)',
-                  fontSize: 14.5,
+                  fontSize: 14,
                   fontWeight: 500,
-                  color: 'var(--color-deep-burgundy)'
+                  color: 'var(--color-deep-burgundy)',
+                  outline: 'none',
+                  minWidth: 0
                 }}
                 disabled={loading}
                 autoComplete="off"
@@ -205,44 +225,16 @@ export default function HomePage() {
                 <button
                   type="button"
                   className="btn-ghost"
-                  style={{ padding: 4, borderRadius: '50%' }}
-                  onClick={() => setLocalSlug('')}
+                  style={{ padding: 4, borderRadius: '50%', color: 'var(--text-muted)' }}
+                  onClick={() => {
+                    setLocalSlug('');
+                    setInputError('');
+                  }}
                   title="Clear input"
                 >
                   <X size={15} />
                 </button>
               )}
-            </div>
-
-            {/* Branch Selector Dropdown */}
-            <div style={{ position: 'relative', minWidth: 130 }}>
-              <select
-                value={branch}
-                onChange={(e) => setBranch(e.target.value)}
-                disabled={loading}
-                style={{
-                  width: '100%',
-                  height: 50,
-                  background: 'var(--color-pearl-white)',
-                  border: '1.5px solid var(--border-gold-solid)',
-                  borderRadius: 'var(--radius-md)',
-                  padding: '0 30px 0 14px',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: 12.5,
-                  fontWeight: 600,
-                  color: 'var(--color-deep-burgundy)',
-                  outline: 'none',
-                  cursor: 'pointer',
-                  appearance: 'none',
-                  WebkitAppearance: 'none'
-                }}
-              >
-                <option value="main">branch: main</option>
-                <option value="master">branch: master</option>
-                <option value="dev">branch: dev</option>
-                <option value="v1.x">tag: v1.x</option>
-              </select>
-              <ChevronDown size={14} color="var(--color-antique-gold)" style={{ position: 'absolute', right: 12, top: 18, pointerEvents: 'none' }} />
             </div>
 
             <button
@@ -251,9 +243,11 @@ export default function HomePage() {
               disabled={loading || !localSlug.trim()}
               style={{
                 height: 50,
-                padding: '0 28px',
+                padding: '0 26px',
                 fontSize: 14.5,
-                borderRadius: 'var(--radius-md)'
+                borderRadius: 'var(--radius-md)',
+                whiteSpace: 'nowrap',
+                flexShrink: 0
               }}
             >
               {loading ? (
@@ -269,6 +263,14 @@ export default function HomePage() {
               )}
             </button>
           </div>
+
+          {/* Inline Validation Error */}
+          {inputError && (
+            <div className="alert alert-error fade-in" style={{ padding: '10px 14px', fontSize: 13, display: 'flex', alignItems: 'center', gap: 8 }}>
+              <AlertTriangle size={15} color="var(--status-rose)" style={{ flexShrink: 0 }} />
+              <div>{inputError}</div>
+            </div>
+          )}
 
           {/* Dynamic Progress Pipeline */}
           {loading && (
@@ -294,20 +296,54 @@ export default function HomePage() {
 
           {/* Graceful Error Display */}
           {status === 'error' && error && (
-            <div className="alert alert-error fade-in" style={{ flexDirection: 'column', gap: 12 }}>
-              <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-                <AlertTriangle size={18} color="var(--status-rose)" style={{ flexShrink: 0, marginTop: 2 }} />
+            <div className="alert alert-error fade-in" style={{ flexDirection: 'column', gap: 14, padding: 18 }}>
+              <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                <AlertTriangle size={20} color="var(--status-rose)" style={{ flexShrink: 0, marginTop: 2 }} />
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 700, fontSize: 14 }}>Cartography Handshake Failed</div>
-                  <div style={{ fontSize: 13, marginTop: 4, color: 'var(--text-secondary)' }}>
+                  <div style={{ fontWeight: 700, fontSize: 14.5, color: 'var(--color-deep-burgundy)' }}>
+                    {isBackendOffline ? 'Backend Service Offline (localhost:5000)' : 'Cartography Handshake Error'}
+                  </div>
+                  <div style={{ fontSize: 13, marginTop: 4, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
                     {error}
                   </div>
-                  <div style={{ fontSize: 12, marginTop: 8, opacity: 0.85 }}>
-                    GitHub public API rate limit may be reached, or repo is private. You can set <code>GITHUB_TOKEN</code> in <code>github-service/.env</code>, or instantly inspect the built-in reference architecture below:
-                  </div>
+
+                  {isBackendOffline && (
+                    <div style={{
+                      marginTop: 12,
+                      padding: '12px 14px',
+                      background: 'rgba(255, 255, 255, 0.7)',
+                      borderRadius: 'var(--radius-sm)',
+                      border: '1px solid var(--border-gold-subtle)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 6
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12.5, fontWeight: 700, color: 'var(--color-deep-burgundy)' }}>
+                        <Terminal size={14} color="var(--color-antique-gold)" />
+                        <span>To analyze live GitHub repositories, run the backend service:</span>
+                      </div>
+                      <code style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: 12,
+                        padding: '4px 8px',
+                        background: 'var(--color-warm-ivory)',
+                        borderRadius: 4,
+                        border: '1px solid var(--border-gold-solid)',
+                        color: 'var(--color-antique-gold)',
+                        display: 'inline-block',
+                        width: 'fit-content'
+                      }}>
+                        node server.js (or: npm.cmd start)
+                      </code>
+                      <div style={{ fontSize: 11.5, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: 4, marginTop: 2 }}>
+                        <Info size={12} />
+                        <span>Or click below to explore the architecture immediately using our built-in dataset without running any server:</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
-              <div style={{ paddingLeft: 28 }}>
+              <div style={{ paddingLeft: 32 }}>
                 <button
                   type="button"
                   className="btn btn-gold"
@@ -357,7 +393,10 @@ export default function HomePage() {
                 key={ex}
                 type="button"
                 className="chip"
-                onClick={() => setLocalSlug(ex)}
+                onClick={() => {
+                  setLocalSlug(ex);
+                  setInputError('');
+                }}
                 disabled={loading}
               >
                 {ex}

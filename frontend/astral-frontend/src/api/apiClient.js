@@ -10,25 +10,39 @@ const GITHUB_SERVICE_URL = import.meta.env.VITE_GITHUB_SERVICE_URL || 'http://lo
 const ANALYZER_URL       = import.meta.env.VITE_ANALYZER_URL       || 'http://localhost:5050';
 
 async function post(url, body) {
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) {
-    throw new Error(data.error || `HTTP ${res.status}: Failed to process analysis`);
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      throw new Error(data.error || `HTTP ${res.status}: Failed to process analysis`);
+    }
+    return data;
+  } catch (err) {
+    if (err.name === 'TypeError' && err.message?.includes('fetch')) {
+      throw new Error(`Unable to connect to backend service at ${url}. Please ensure github-service is running.`);
+    }
+    throw err;
   }
-  return data;
 }
 
 async function get(url) {
-  const res = await fetch(url);
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) {
-    throw new Error(data.error || `HTTP ${res.status}: Request failed`);
+  try {
+    const res = await fetch(url);
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      throw new Error(data.error || `HTTP ${res.status}: Request failed`);
+    }
+    return data;
+  } catch (err) {
+    if (err.name === 'TypeError' && err.message?.includes('fetch')) {
+      throw new Error(`Unable to connect to service at ${url}.`);
+    }
+    throw err;
   }
-  return data;
 }
 
 /**
@@ -136,11 +150,15 @@ export async function getAnalyzerHealth() {
  * Build a full GitHub HTTPS URL from an org/repo slug or URL.
  */
 export function slugToUrl(slug) {
-  const clean = slug.trim();
+  if (!slug || typeof slug !== 'string') return '';
+  let clean = slug.trim();
+  // Strip trailing slashes and .git
+  clean = clean.replace(/\/+$/, '').replace(/\.git$/, '');
   if (clean.startsWith('http://') || clean.startsWith('https://')) {
     return clean;
   }
-  return `https://github.com/${clean.replace(/^github\.com\//, '')}`;
+  clean = clean.replace(/^github\.com\//i, '');
+  return `https://github.com/${clean}`;
 }
 
 /**

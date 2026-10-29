@@ -5,7 +5,8 @@ import {
   CheckCircle2, 
   ChevronDown, 
   ChevronUp, 
-  Network
+  Network,
+  Sparkles
 } from 'lucide-react';
 
 export default function CircularPage() {
