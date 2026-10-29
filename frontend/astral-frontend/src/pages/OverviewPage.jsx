@@ -1,48 +1,117 @@
 import React, { useMemo } from 'react';
 import { useAnalysis } from '../context/AnalysisContext';
+import { 
+  Network, 
+  Activity, 
+  FileCode, 
+  GitFork, 
+  Layers, 
+  AlertTriangle, 
+  Flame, 
+  Compass, 
+  ShieldCheck, 
+  Sparkles, 
+  BookOpen, 
+  Code
+} from 'lucide-react';
 
+/* ── Royal Health Ring ── */
 function HealthRing({ score }) {
   const r = 52;
   const circumference = 2 * Math.PI * r;
-  const filled = (score / 100) * circumference;
-  const color = score >= 80 ? 'var(--color-emerald)' : score >= 50 ? 'var(--color-amber)' : 'var(--color-coral)';
+  const filled = Math.max(0, Math.min(100, score)) / 100 * circumference;
+  
+  const strokeColor = score >= 80 ? '#228B58' : score >= 50 ? '#D4AF70' : '#B93855';
+  const trackColor = 'rgba(212, 175, 112, 0.2)';
+
   return (
-    <svg width="140" height="140" viewBox="0 0 140 140">
-      <circle cx="70" cy="70" r={r} fill="none" stroke="var(--color-surface-container)" strokeWidth="12" />
-      <circle cx="70" cy="70" r={r} fill="none" stroke={color} strokeWidth="12"
+    <svg width="150" height="150" viewBox="0 0 150 150">
+      <defs>
+        <radialGradient id="ringGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#FFF9F5" />
+          <stop offset="100%" stopColor="#F8F1E8" />
+        </radialGradient>
+      </defs>
+      <circle cx="75" cy="75" r="66" fill="url(#ringGlow)" stroke="rgba(212, 175, 112, 0.25)" strokeWidth="1" />
+      <circle cx="75" cy="75" r={r} fill="none" stroke={trackColor} strokeWidth="10" />
+      <circle
+        cx="75"
+        cy="75"
+        r={r}
+        fill="none"
+        stroke={strokeColor}
+        strokeWidth="10"
         strokeDasharray={`${filled} ${circumference - filled}`}
         strokeLinecap="round"
-        style={{ transform: 'rotate(-90deg)', transformOrigin: '70px 70px', transition: 'stroke-dasharray 0.8s ease' }}
+        style={{
+          transform: 'rotate(-90deg)',
+          transformOrigin: '75px 75px',
+          transition: 'stroke-dasharray 0.9s cubic-bezier(0.16, 1, 0.3, 1)'
+        }}
       />
-      <text x="70" y="65" textAnchor="middle" dominantBaseline="middle"
-        style={{ fontFamily: 'var(--font-sans)', fontSize: 26, fontWeight: 700, fill: 'var(--color-on-surface)' }}>
+      <text
+        x="75"
+        y="70"
+        textAnchor="middle"
+        dominantBaseline="middle"
+        style={{
+          fontFamily: 'var(--font-sans)',
+          fontSize: 32,
+          fontWeight: 800,
+          fill: 'var(--color-deep-burgundy)'
+        }}
+      >
         {score}
       </text>
-      <text x="70" y="85" textAnchor="middle"
-        style={{ fontFamily: 'var(--font-sans)', fontSize: 11, fill: 'var(--color-on-surface-variant)' }}>
-        / 100
+      <text
+        x="75"
+        y="94"
+        textAnchor="middle"
+        style={{
+          fontFamily: 'var(--font-mono)',
+          fontSize: 11,
+          fontWeight: 600,
+          letterSpacing: '0.05em',
+          fill: 'var(--text-muted)'
+        }}
+      >
+        OUT OF 100
       </text>
     </svg>
   );
 }
 
-function StatCard({ label, value, sub, color }) {
+function StatCard({ label, value, sub, icon: Icon, color, isWarning, onClick }) {
   return (
-    <div className="stat-card fade-in">
-      <div className="stat-label">{label}</div>
-      <div className="stat-value" style={color ? { color } : {}}>{value}</div>
+    <div
+      className="stat-card fade-in"
+      onClick={onClick}
+      style={{
+        borderColor: isWarning ? 'rgba(185, 56, 85, 0.4)' : undefined,
+        background: isWarning ? 'linear-gradient(145deg, #FFFDFB 0%, #FDF2F4 100%)' : undefined,
+        cursor: onClick ? 'pointer' : 'default'
+      }}
+      title={onClick ? `Open ${label}` : undefined}
+    >
+      <div className="stat-label">
+        <span>{label}</span>
+        {Icon && <Icon size={14} color={color || 'var(--color-antique-gold)'} />}
+      </div>
+      <div className="stat-value" style={color ? { color } : {}}>
+        {value}
+      </div>
       {sub && <div className="stat-meta">{sub}</div>}
     </div>
   );
 }
 
-function MetricRow({ label, value, max = 100, color = 'var(--color-primary)' }) {
+function MetricRow({ label, value, max = 100, color = 'var(--grad-gold)' }) {
   const pct = Math.min((value / max) * 100, 100);
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
-        <span style={{ color: 'var(--color-on-surface-variant)' }}>{label}</span>
-        <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600, color: 'var(--color-on-surface)' }}>{value}</span>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5 }}>
+        <span style={{ color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>{label}</span>
+        <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600, color: 'var(--color-deep-burgundy)' }}>{value}</span>
       </div>
       <div className="progress-bar">
         <div className="progress-fill" style={{ width: `${pct}%`, background: color }} />
@@ -51,18 +120,16 @@ function MetricRow({ label, value, max = 100, color = 'var(--color-primary)' }) 
   );
 }
 
-const EMPTY_ARR = [];
-
 export default function OverviewPage() {
-  const { state, setView } = useAnalysis();
+  const { state, setView, navigateToCodeExplorer } = useAnalysis();
   const { result } = state;
 
   const repository = result?.repository;
   const architecture = result?.architecture;
   const summary = architecture?.summary;
-  const nodes = architecture?.nodes || EMPTY_ARR;
-  const hotspots = architecture?.hotspots || EMPTY_ARR;
-  const onboarding = architecture?.onboarding || EMPTY_ARR;
+  const nodes = architecture?.nodes || [];
+  const hotspots = architecture?.hotspots || [];
+  const onboarding = architecture?.onboarding || {};
   const hs = summary?.healthScore ?? 0;
 
   const topHotspots = useMemo(() =>
@@ -81,114 +148,277 @@ export default function OverviewPage() {
 
   if (!result) return null;
 
-  const healthLabel = hs >= 80 ? 'Excellent' : hs >= 60 ? 'Good' : hs >= 40 ? 'Fair' : 'Critical';
-  const healthColor = hs >= 80 ? '#047857' : hs >= 60 ? '#b45309' : hs >= 40 ? '#b45309' : '#b91c1c';
+  const healthLabel = hs >= 80 ? 'Imperial Grade' : hs >= 60 ? 'Robust Structure' : hs >= 40 ? 'Moderate Debt' : 'Critical Action Needed';
+  const healthColor = hs >= 80 ? '#228B58' : hs >= 60 ? '#A98245' : '#B93855';
+
+  const goodFirstIssues = onboarding?.goodFirstIssues || [];
+  const coreHubs = onboarding?.coreHubs || [];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24, maxWidth: 1100, margin: '0 auto', width: '100%' }}>
-      {/* Repo header */}
-      <div className="fade-in" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 28,
+      maxWidth: 1200,
+      margin: '0 auto',
+      width: '100%',
+      padding: '28px 0'
+    }}>
+      {/* Repository Title Banner */}
+      <div className="royal-card fade-in" style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: 20,
+        background: 'linear-gradient(135deg, #FFFDFB 0%, #F9F1E8 100%)',
+        border: '1.5px solid var(--border-gold-solid)'
+      }}>
         <div>
-          <div className="section-eyebrow">Repository</div>
-          <h1 className="section-title">{repository?.fullName || repository?.name}</h1>
+          <div className="section-eyebrow">
+            <Sparkles size={12} color="var(--color-antique-gold)" />
+            <span>Repository Architecture Overview</span>
+          </div>
+          <h1 className="section-title">
+            {repository?.fullName || repository?.name || 'Analyzed Codebase'}
+          </h1>
           {repository?.description && (
-            <p style={{ fontSize: 14, color: 'var(--color-on-surface-variant)', marginTop: 6, maxWidth: 560 }}>
+            <p style={{
+              fontSize: 14.5,
+              color: 'var(--text-secondary)',
+              marginTop: 6,
+              maxWidth: 680,
+              lineHeight: 1.6
+            }}>
               {repository.description}
             </p>
           )}
         </div>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <button className="btn btn-secondary" onClick={() => setView('dependency')}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
-              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-            </svg>
-            View Graph
+
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          <button className="btn btn-gold" onClick={() => setView('dependency')}>
+            <Network size={16} />
+            <span>Open Dependency Graph</span>
           </button>
-          <button className="btn btn-secondary" onClick={() => setView('health')}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-            </svg>
-            Health Report
+          <button className="btn btn-royal" onClick={() => setView('health')}>
+            <Activity size={16} />
+            <span>Full Health Audit</span>
           </button>
         </div>
       </div>
 
-      {/* Stats */}
+      {/* Primary Metrics Grid (Clickable to jump directly into specific views) */}
       <div className="stats-grid">
-        <StatCard label="Source Files"       value={summary?.totalFiles?.toLocaleString()}    sub="Analyzed files" />
-        <StatCard label="Dependencies"       value={summary?.totalEdges?.toLocaleString()}    sub="Import edges" />
-        <StatCard label="Symbols"            value={summary?.totalSymbols?.toLocaleString()}  sub="Functions / Classes" />
-        <StatCard label="Circular Cycles"    value={summary?.circularCyclesCount}            sub="Dependency loops"
-          color={summary?.circularCyclesCount > 0 ? 'var(--color-coral)' : 'var(--color-emerald)'} />
-        <StatCard label="God Files"          value={summary?.godFilesCount}                  sub="High coupling nodes"
-          color={summary?.godFilesCount > 0 ? 'var(--color-amber)' : 'var(--color-emerald)'} />
-        <StatCard label="Parse Errors"       value={summary?.totalErrors}                    sub="Files skipped"
-          color={summary?.totalErrors > 0 ? 'var(--color-amber)' : ''} />
+        <StatCard
+          label="Source Files"
+          value={summary?.totalFiles?.toLocaleString() ?? 0}
+          sub="Click to explore files"
+          icon={FileCode}
+          onClick={() => setView('codeExplorer')}
+        />
+        <StatCard
+          label="Import Edges"
+          value={summary?.totalEdges?.toLocaleString() ?? 0}
+          sub="Click to open graph"
+          icon={GitFork}
+          onClick={() => setView('dependency')}
+        />
+        <StatCard
+          label="AST Symbols"
+          value={summary?.totalSymbols?.toLocaleString() ?? 0}
+          sub="Functions & classes"
+          icon={Code}
+          onClick={() => setView('codeExplorer')}
+        />
+        <StatCard
+          label="Circular Loops"
+          value={summary?.circularCyclesCount ?? 0}
+          sub={summary?.circularCyclesCount > 0 ? "Requires decoupling (click)" : "Clean hierarchy"}
+          icon={AlertTriangle}
+          color={summary?.circularCyclesCount > 0 ? 'var(--status-rose)' : 'var(--status-emerald)'}
+          isWarning={summary?.circularCyclesCount > 0}
+          onClick={() => setView('circular')}
+        />
+        <StatCard
+          label="Debt Hotspots"
+          value={summary?.godFilesCount ?? 0}
+          sub="Click to view hotspots"
+          icon={Flame}
+          color={summary?.godFilesCount > 0 ? 'var(--status-amber)' : 'var(--status-emerald)'}
+          onClick={() => setView('hotspots')}
+        />
+        <StatCard
+          label="Function Calls"
+          value={summary?.totalFunctionCalls?.toLocaleString() ?? 0}
+          sub="Click for call graph"
+          icon={Layers}
+          onClick={() => setView('callGraph')}
+        />
       </div>
 
-      {/* 3-column lower section */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr 1fr', gap: 20, alignItems: 'start', flexWrap: 'wrap' }}>
-        {/* Health ring */}
-        <div className="card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, padding: 24 }}>
-          <div style={{ fontSize: 12, fontWeight: 600, letterSpacing: '0.04em', color: 'var(--color-outline)', textTransform: 'uppercase' }}>
-            Health Score
+      {/* 3-Column Visual Diagnostics */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'minmax(280px, 320px) 1fr 1fr',
+        gap: 20,
+        alignItems: 'stretch'
+      }}>
+        {/* Health Ring Gauge */}
+        <div
+          className="royal-card fade-in"
+          onClick={() => setView('health')}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 14,
+            padding: 28,
+            cursor: 'pointer'
+          }}
+          title="Click to view Architecture Health Breakdown"
+        >
+          <div style={{
+            fontSize: 11,
+            fontFamily: 'var(--font-mono)',
+            fontWeight: 700,
+            letterSpacing: '0.08em',
+            color: 'var(--text-muted)',
+            textTransform: 'uppercase'
+          }}>
+            Imperial Health Score
           </div>
           <HealthRing score={hs} />
           <div style={{
-            fontSize: 16, fontWeight: 700, color: healthColor,
-            padding: '4px 14px', borderRadius: 'var(--radius-full)',
-            background: `${healthColor}18`,
+            fontSize: 14,
+            fontWeight: 700,
+            color: healthColor,
+            padding: '5px 16px',
+            borderRadius: 'var(--radius-full)',
+            background: `${healthColor}16`,
+            border: `1px solid ${healthColor}40`,
+            fontFamily: 'var(--font-sans)'
           }}>
             {healthLabel}
           </div>
-          <div style={{ fontSize: 12, color: 'var(--color-on-surface-variant)', textAlign: 'center', lineHeight: 1.5 }}>
-            Based on complexity, coupling, and cycle density
+          <div style={{
+            fontSize: 12,
+            color: 'var(--text-secondary)',
+            textAlign: 'center',
+            lineHeight: 1.5,
+            maxWidth: 240
+          }}>
+            Weighted synthesis of cyclomatic debt, coupling topology, and recursion loops.
           </div>
         </div>
 
-        {/* Language breakdown */}
-        <div className="card">
-          <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 16, color: 'var(--color-on-surface)' }}>
-            File Extensions
+        {/* File Extension Distribution */}
+        <div className="royal-card fade-in">
+          <div style={{
+            fontWeight: 700,
+            fontSize: 15,
+            marginBottom: 16,
+            color: 'var(--color-deep-burgundy)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}>
+            <span>File Types & Extensions</span>
+            <span className="pill pill-gold">{langBreakdown.length} types</span>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             {langBreakdown.map(([ext, cnt]) => (
-              <MetricRow key={ext} label={ext} value={cnt} max={nodes.length || 1} />
+              <MetricRow
+                key={ext}
+                label={ext}
+                value={`${cnt} file${cnt > 1 ? 's' : ''}`}
+                max={nodes.length || 1}
+              />
             ))}
           </div>
         </div>
 
-        {/* Hotspots */}
-        <div className="card">
-          <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 16, color: 'var(--color-on-surface)' }}>
-            Top Complexity Hotspots
+        {/* Complexity Hotspots Preview */}
+        <div className="royal-card fade-in">
+          <div style={{
+            fontWeight: 700,
+            fontSize: 15,
+            marginBottom: 16,
+            color: 'var(--color-deep-burgundy)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}>
+            <span>Top Complexity Hotspots</span>
+            <button
+              type="button"
+              className="btn-ghost"
+              style={{ fontSize: 11, padding: '2px 8px' }}
+              onClick={() => setView('hotspots')}
+            >
+              View All ({hotspots.length || nodes.length}) →
+            </button>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {topHotspots.length === 0 ? (
-              <div style={{ fontSize: 12, color: 'var(--color-outline)', textAlign: 'center', padding: 16 }}>No hotspots detected</div>
-            ) : topHotspots.map((h, i) => (
-              <div key={h.id || i} style={{
-                display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px',
-                borderRadius: 'var(--radius)', background: 'var(--color-surface-container-low)',
+              <div style={{
+                fontSize: 13,
+                color: 'var(--text-muted)',
+                textAlign: 'center',
+                padding: '30px 10px'
               }}>
+                No high-complexity hotspots detected. Excellent modular cohesion.
+              </div>
+            ) : topHotspots.map((h, i) => (
+              <div
+                key={h.file || h.id || i}
+                onClick={() => navigateToCodeExplorer(h.file || h.name || h.id)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 12,
+                  padding: '10px 12px',
+                  borderRadius: 'var(--radius-md)',
+                  background: 'var(--color-warm-ivory)',
+                  border: '1px solid var(--border-gold-subtle)',
+                  cursor: 'pointer',
+                  transition: 'transform 0.15s ease'
+                }}
+                title="Click to inspect this file in Code Explorer"
+              >
                 <div style={{
-                  width: 24, height: 24, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  background: i === 0 ? 'rgba(239,68,68,0.12)' : 'rgba(245,158,11,0.12)',
-                  fontSize: 10, fontWeight: 700,
-                  color: i === 0 ? 'var(--color-coral)' : 'var(--color-amber)',
+                  width: 24,
+                  height: 24,
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: i === 0 ? 'rgba(185, 56, 85, 0.15)' : 'rgba(212, 175, 112, 0.25)',
+                  fontSize: 11,
+                  fontWeight: 700,
+                  color: i === 0 ? 'var(--status-rose)' : 'var(--color-antique-gold)',
                   flexShrink: 0,
-                }}>{i + 1}</div>
+                }}>
+                  {i + 1}
+                </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {h.name || h.id}
+                  <div style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 12,
+                    fontWeight: 600,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    color: 'var(--color-deep-burgundy)'
+                  }}>
+                    {h.file || h.name || h.id}
                   </div>
-                  <div style={{ fontSize: 11, color: 'var(--color-on-surface-variant)' }}>
-                    complexity {h.complexity}
+                  <div style={{ fontSize: 11, color: 'var(--text-secondary)' }}>
+                    {h.loc ? `${h.loc} lines · ` : ''}Cyclomatic CC: {h.complexity}
                   </div>
                 </div>
-                <span className={`pill ${h.complexity > 10 ? 'pill-error' : 'pill-warn'}`}>
+                <span className={`pill ${h.complexity > 10 ? 'pill-error' : 'pill-amber'}`}>
                   CC {h.complexity}
                 </span>
               </div>
@@ -197,29 +427,154 @@ export default function OverviewPage() {
         </div>
       </div>
 
-      {/* Onboarding path */}
-      {onboarding.length > 0 && (
-        <div className="card fade-in">
-          <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 4 }}>🚀 Suggested Onboarding Path</div>
-          <div style={{ fontSize: 12, color: 'var(--color-on-surface-variant)', marginBottom: 16 }}>
-            Start with low-complexity, low-coupling files to understand the codebase
-          </div>
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            {onboarding.slice(0, 8).map((f, i) => (
-              <div key={i} style={{
-                display: 'flex', alignItems: 'center', gap: 6,
-                padding: '5px 12px', borderRadius: 'var(--radius-full)',
-                background: 'var(--color-surface-container-low)',
-                border: '1px solid var(--color-outline-variant)', fontSize: 12,
+      {/* Smart Onboarding Recommendations Preview */}
+      {(goodFirstIssues.length > 0 || coreHubs.length > 0) && (
+        <div className="royal-card royal-card-highlight fade-in" style={{ padding: '26px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8, flexWrap: 'wrap', gap: 10 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <Compass size={20} color="var(--color-antique-gold)" />
+              <h3 style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 22,
+                fontWeight: 700,
+                color: 'var(--color-deep-burgundy)'
               }}>
-                <span style={{
-                  width: 18, height: 18, borderRadius: '50%', background: 'var(--color-primary)',
-                  color: '#fff', fontSize: 9, fontWeight: 700,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                }}>{i + 1}</span>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11 }}>{f}</span>
+                Smart Onboarding Pathways & Architecture Tour
+              </h3>
+            </div>
+            <button
+              type="button"
+              className="btn btn-royal"
+              style={{ fontSize: 12, padding: '6px 14px' }}
+              onClick={() => setView('onboarding')}
+            >
+              Explore Full Pathways →
+            </button>
+          </div>
+          <p style={{ fontSize: 14, color: 'var(--text-secondary)', marginBottom: 20 }}>
+            Automated architectural recommendations to guide developers navigating this codebase for the first time.
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 18 }}>
+            {/* Good First Issues */}
+            {goodFirstIssues.length > 0 && (
+              <div style={{
+                background: 'var(--color-pearl-white)',
+                border: '1px solid var(--border-gold-subtle)',
+                borderRadius: 'var(--radius-md)',
+                padding: '18px'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  fontSize: 13,
+                  fontWeight: 700,
+                  color: 'var(--color-antique-gold)',
+                  fontFamily: 'var(--font-mono)',
+                  marginBottom: 12
+                }}>
+                  <ShieldCheck size={16} />
+                  <span>SAFE ENTRY MODULES (LOW BLAST RADIUS)</span>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {goodFirstIssues.slice(0, 5).map((f, i) => (
+                    <div
+                      key={i}
+                      onClick={() => navigateToCodeExplorer(f.file || f.name)}
+                      style={{
+                        padding: '10px 12px',
+                        background: 'var(--color-warm-ivory)',
+                        borderRadius: 'var(--radius-sm)',
+                        border: '1px solid rgba(212, 175, 112, 0.25)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 4,
+                        cursor: 'pointer'
+                      }}
+                      title="Click to view file in Code Explorer"
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: 12,
+                          fontWeight: 600,
+                          color: 'var(--color-deep-burgundy)'
+                        }}>
+                          {f.file || f.name}
+                        </span>
+                        <span className="pill pill-emerald" style={{ height: 18, fontSize: 10 }}>
+                          CC {f.complexity ?? 1} · {f.loc ?? 0} LOC
+                        </span>
+                      </div>
+                      <div style={{ fontSize: 11.5, color: 'var(--text-secondary)' }}>
+                        {f.recommendation || 'Safe isolated file for newcomer contributions.'}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
-            ))}
+            )}
+
+            {/* Core Architectural Hubs */}
+            {coreHubs.length > 0 && (
+              <div style={{
+                background: 'var(--color-pearl-white)',
+                border: '1px solid var(--border-gold-subtle)',
+                borderRadius: 'var(--radius-md)',
+                padding: '18px'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  fontSize: 13,
+                  fontWeight: 700,
+                  color: 'var(--color-deep-burgundy)',
+                  fontFamily: 'var(--font-mono)',
+                  marginBottom: 12
+                }}>
+                  <BookOpen size={16} color="var(--color-champagne-gold)" />
+                  <span>CORE ARCHITECTURAL HUBS (READ FIRST)</span>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {coreHubs.slice(0, 5).map((h, i) => (
+                    <div
+                      key={i}
+                      onClick={() => navigateToCodeExplorer(h.file || h.name)}
+                      style={{
+                        padding: '10px 12px',
+                        background: 'var(--color-warm-ivory)',
+                        borderRadius: 'var(--radius-sm)',
+                        border: '1px solid rgba(212, 175, 112, 0.25)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 4,
+                        cursor: 'pointer'
+                      }}
+                      title="Click to view file in Code Explorer"
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: 12,
+                          fontWeight: 600,
+                          color: 'var(--color-deep-burgundy)'
+                        }}>
+                          {h.file || h.name}
+                        </span>
+                        <span className="pill pill-gold" style={{ height: 18, fontSize: 10 }}>
+                          {h.dependentsCount ?? 0} Dependents
+                        </span>
+                      </div>
+                      <div style={{ fontSize: 11.5, color: 'var(--text-secondary)' }}>
+                        {h.recommendation || 'Fundamental hub defining core data flow.'}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
